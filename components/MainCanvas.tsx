@@ -9,7 +9,7 @@ import {
   TrendingUp, BarChart3, Scale, Info, Building2, MousePointerClick, Flag, History, PenTool,
   Network, Cpu, MessageSquare, Mic, Share2, ListTodo, ToggleLeft, ToggleRight, CheckSquare, Square,
   BrainCircuit, HelpCircle, Mail, Loader2, DollarSign, Wallet, Crosshair, Lock, Fingerprint,
-  FileCheck, ScrollText, Compass, Printer, Edit3, ClipboardList
+  FileCheck, ScrollText, Compass, Printer, Edit3, ClipboardList, AlertOctagon, Eye, Microscope
 } from 'lucide-react';
 import { ReportParameters, ReportData, GenerationPhase, LiveOpportunityItem, ReportSection, NeuroSymbolicState, CopilotInsight } from '../types';
 import { 
@@ -85,23 +85,15 @@ const ENGINE_CATALOG = [
     { id: 'Sentiment Engine', label: 'Sentiment Engine', desc: 'Public perception & brand risk analysis.', icon: MessageSquare, color: 'text-pink-600', bg: 'bg-pink-50', border: 'border-pink-200' },
 ];
 
-// Helper to get region specific risks
-const getRegionalRisks = (country: string) => {
-    if (!country) return DETAILED_RISK_FACTORS.slice(0, 4);
-    
-    // Simple logic to simulate knowledge graph lookup
-    const risks = [
-        `Regulatory Friction in ${country}`,
-        `Currency Volatility (${country})`,
-        `Local Partner Compliance`,
-        `Supply Chain bottlenecks in ${country}`,
-        `Labor Law constraints`,
-        `IP Protection in Region`,
-        `Political Succession Risk`,
-        `Infrastructure Latency`
-    ];
-    return risks;
-};
+// Base Risk Categories for dynamic generation
+const BASE_RISK_CATEGORIES = [
+    { id: 'regulatory', label: 'Regulatory Friction', icon: Scale },
+    { id: 'currency', label: 'Currency Volatility', icon: TrendingUp },
+    { id: 'supply', label: 'Supply Chain Fragility', icon: ActivityIcon },
+    { id: 'labor', label: 'Labor/Talent Shortage', icon: Users },
+    { id: 'ip', label: 'IP Protection', icon: ShieldCheck },
+    { id: 'political', label: 'Political Instability', icon: AlertOctagon },
+];
 
 const SelectOrInput = ({ label, value, options, onChange, placeholder = "Enter custom value...", fallbackList = [] }: any) => {
     const effectiveOptions = options.length > 0 ? options : fallbackList.map((s: string) => ({ value: s, label: s }));
@@ -183,6 +175,12 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     const [isComparativeModalOpen, setIsComparativeModalOpen] = useState(false);
     const [resultTab, setResultTab] = useState<'dossier' | 'simulation' | 'market'>('dossier');
     
+    // Risk State
+    const [riskArea, setRiskArea] = useState(params.country || '');
+    const [activeRisk, setActiveRisk] = useState<string | null>(null);
+    const [riskAnalysisText, setRiskAnalysisText] = useState<string>('');
+    const [isAnalyzingRisk, setIsAnalyzingRisk] = useState(false);
+
     // Scroll Container Ref
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -219,6 +217,13 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
             setStep(6);
         }
     }, [generationPhase]);
+
+    // Update risk area default if country changes
+    useEffect(() => {
+        if (params.country && (!riskArea || riskArea === 'Global')) {
+            setRiskArea(params.country);
+        }
+    }, [params.country]);
 
     // Enhanced Copilot Messaging for "Live Consultant" feel
     useEffect(() => {
@@ -258,6 +263,39 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         setSelectedDeliverables(prev => 
             prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
         );
+    };
+
+    // Risk Analysis Simulation
+    const handleRiskClick = async (riskId: string, riskLabel: string) => {
+        setActiveRisk(riskId);
+        setIsAnalyzingRisk(true);
+        // toggle in params if needed, or just view
+        if (!params.partnershipSupportNeeds?.includes(riskLabel)) {
+            toggleArrayParam('partnershipSupportNeeds', riskLabel);
+        }
+        
+        // Mocking the "Deep Dive" content based on the location
+        const mockDelay = 800;
+        const location = riskArea || params.country || "Target Region";
+        
+        setTimeout(() => {
+            let analysis = "";
+            switch (riskId) {
+                case 'regulatory': 
+                    analysis = `INVESTOR CONCERN: ${location} is notorious for opaque licensing procedures. Foreign entities often face 6-12 month delays without a local joint venture. \n\nNEXUS MITIGATION: Deploy the 'Regulatory Navigation Index' to map specific agency bottlenecks. Use a local 'Special Purpose Vehicle' (SPV) to bypass Level-1 scrutiny.`;
+                    break;
+                case 'currency':
+                    analysis = `INVESTOR CONCERN: Volatility in the local currency vs. USD creates a 15-20% margin risk for repatriation of profits. \n\nNEXUS MITIGATION: Structuring contracts in a hard-currency basket or utilizing a 'Synthetic Hedge' via operational expenses can neutralize this exposure.`;
+                    break;
+                case 'supply':
+                    analysis = `INVESTOR CONCERN: Last-mile logistics in ${location} suffer from infrastructure fragmentation, leading to a 30% higher cost-per-unit than regional peers. \n\nNEXUS MITIGATION: We recommend a 'Hub-and-Spoke' distribution model leveraging Tier-2 logistics partners identified by the Matchmaking Engine.`;
+                    break;
+                default:
+                    analysis = `INVESTOR CONCERN: General uncertainty regarding ${riskLabel} in ${location} increases the cost of capital by an estimated 250 basis points. \n\nNEXUS MITIGATION: Systematic monitoring and local insurance wrappers can reduce the perceived risk premium.`;
+            }
+            setRiskAnalysisText(analysis);
+            setIsAnalyzingRisk(false);
+        }, mockDelay);
     };
 
     const handleGenerateReportWithOrchestrator = async () => {
@@ -488,58 +526,75 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
                 {/* COLUMN 2: RISK & SENSITIVITY */}
                 <div className="space-y-8">
-                    <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-5 h-full">
-                        {/* UPDATE: Orange header + Description */}
-                        <div className="border-b border-orange-200 pb-2">
+                    <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm h-full flex flex-col">
+                        <div className="border-b border-orange-200 pb-2 mb-4">
                             <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
                                 <ShieldCheck className="w-4 h-4" /> Risk Horizon & Sensitivities
                             </h4>
-                            <p className="text-xs text-stone-500">Calibrate the system's sensitivity to regional and operational risks.</p>
+                            <p className="text-xs text-stone-500">Address specific regional concerns and calibrate risk models.</p>
                         </div>
-                        
-                        {/* Dynamic Risk Injection based on Country */}
-                        <div>
-                            <label className="text-xs font-bold text-stone-700 block mb-2 uppercase tracking-wide">
-                                Targeted Risk Monitors ({params.country || 'Global'})
-                            </label>
-                            <p className="text-[10px] text-stone-500 mb-3">
-                                The system has pre-selected risks relevant to your target jurisdiction. Add more if needed.
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {getRegionalRisks(params.country).map(factor => (
+
+                        {/* Hyper-Local Context Input */}
+                        <div className="mb-6">
+                            <label className="text-xs font-bold text-stone-700 block mb-1 uppercase tracking-wide">Specific Area of Interest</label>
+                            <div className="relative">
+                                <MapPin className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
+                                <input 
+                                    type="text" 
+                                    value={riskArea}
+                                    onChange={(e) => setRiskArea(e.target.value)}
+                                    placeholder="e.g. Ho Chi Minh City, District 1"
+                                    className="w-full p-2.5 pl-10 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none"
+                                />
+                            </div>
+                            <p className="text-[10px] text-stone-400 mt-1 italic">Enter a city or zone to get hyper-local risk intelligence.</p>
+                        </div>
+
+                        {/* Risk Monitors Grid */}
+                        <div className="flex-1">
+                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Active Risk Monitors</label>
+                            <div className="grid grid-cols-2 gap-3 mb-6">
+                                {BASE_RISK_CATEGORIES.map((risk) => (
                                     <button
-                                        key={factor}
-                                        onClick={() => toggleArrayParam('partnershipSupportNeeds', factor)} 
-                                        className={`text-left px-3 py-2 rounded text-[10px] font-bold border transition-all flex items-center gap-2 ${
-                                            (params.partnershipSupportNeeds || []).includes(factor)
-                                            ? 'bg-amber-50 text-amber-800 border-amber-200 shadow-sm'
-                                            : 'bg-white text-stone-400 border-stone-200 hover:border-amber-200'
+                                        key={risk.id}
+                                        onClick={() => handleRiskClick(risk.id, risk.label)}
+                                        className={`p-3 rounded-lg border text-left transition-all relative overflow-hidden group ${
+                                            activeRisk === risk.id 
+                                            ? 'bg-orange-50 border-orange-200 ring-1 ring-orange-200 shadow-sm' 
+                                            : 'bg-white border-stone-200 hover:border-orange-200 hover:shadow-sm'
                                         }`}
                                     >
-                                        {(params.partnershipSupportNeeds || []).includes(factor) && <CheckCircle2 size={12} />}
-                                        {factor}
+                                        <div className="flex items-center justify-between mb-1">
+                                            <risk.icon className={`w-4 h-4 ${activeRisk === risk.id ? 'text-orange-600' : 'text-stone-400 group-hover:text-orange-400'}`} />
+                                            {activeRisk === risk.id && <Eye className="w-3 h-3 text-orange-400 animate-pulse" />}
+                                        </div>
+                                        <div className={`text-xs font-bold ${activeRisk === risk.id ? 'text-stone-900' : 'text-stone-600'}`}>{risk.label}</div>
                                     </button>
                                 ))}
                             </div>
-                        </div>
 
-                        <div className="mt-6 pt-4 border-t border-stone-100">
-                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Organizational Risk Tolerance</label>
-                            <div className="space-y-2">
-                                {RISK_APPETITE_LEVELS.map((lvl) => (
-                                    <label key={lvl.value} className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-all ${params.riskTolerance === lvl.value ? 'bg-stone-900 text-white border-stone-900' : 'bg-white border-stone-200 hover:border-stone-300'}`}>
-                                        <input 
-                                            type="radio" 
-                                            name="risk"
-                                            className="hidden"
-                                            checked={params.riskTolerance === lvl.value}
-                                            onChange={() => handleParamChange('riskTolerance', lvl.value)}
-                                        />
-                                        <div className={`w-3 h-3 rounded-full border flex items-center justify-center ${params.riskTolerance === lvl.value ? 'border-white bg-white' : 'border-stone-400'}`}></div>
-                                        <span className="text-xs font-bold">{lvl.label}</span>
-                                    </label>
-                                ))}
-                            </div>
+                            {/* Deep Dive Inspector Panel */}
+                            {activeRisk && (
+                                <div className="bg-stone-900 text-stone-300 p-5 rounded-xl border border-stone-700 animate-in slide-in-from-top-2">
+                                    <div className="flex items-center justify-between mb-3 border-b border-stone-700 pb-2">
+                                        <h5 className="text-xs font-bold text-white uppercase flex items-center gap-2">
+                                            <Microscope className="w-3 h-3 text-orange-500" /> Deep Dive: {BASE_RISK_CATEGORIES.find(r => r.id === activeRisk)?.label}
+                                        </h5>
+                                        <span className="text-[9px] font-mono text-stone-500">{riskArea || 'Global'} Context</span>
+                                    </div>
+                                    
+                                    {isAnalyzingRisk ? (
+                                        <div className="py-4 text-center">
+                                            <Loader2 className="w-6 h-6 text-orange-500 animate-spin mx-auto mb-2" />
+                                            <p className="text-xs text-stone-500">Retrieving local intelligence...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4 text-xs leading-relaxed">
+                                            <div className="whitespace-pre-wrap">{riskAnalysisText}</div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

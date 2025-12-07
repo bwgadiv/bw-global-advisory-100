@@ -41,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-bw-gold/10 border border-bw-gold/30 rounded-full text-bw-gold text-xs font-bold uppercase tracking-widest mb-6">
-                        <Binary size={14} /> The 100-Year Blind Spot
+                        <Binary size={14} /> The Intelligence Gap
                     </div>
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-[1.1] mb-8">
                         We didn't just build a database. <br/>
@@ -52,10 +52,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
 
                     <div className="space-y-8 text-lg text-gray-300 max-w-3xl leading-relaxed font-light border-l-2 border-stone-700 pl-6">
                         <p className="text-white font-medium">
-                            Standard frameworks (SWOT, PESTLE) fail in regional markets because they were designed for stability. They cannot calculate chaos.
+                            Regional markets are not chaotic; they are simply complex. They operate on a different frequency than global capitals, driven by relationships and informal networks.
                         </p>
                         <p>
-                            We architected the <strong className="text-bw-gold">Nexus OS™</strong> to solve this specific failure point. It is not a passive consultancy tool; it is the first deterministic engine designed to translate the "blind spots" of regional expansion into the language of global capital.
+                            We architected the <strong className="text-bw-gold">Regional Intelligence Core</strong> to decode this frequency. It is not a passive consultancy tool; it is a deterministic engine designed to translate the specific "blind spots" of regional expansion into the language of global capital.
                         </p>
                     </div>
 
@@ -66,7 +66,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
                             </div>
                             <div>
                                 <span className="block text-xs text-gray-400 uppercase tracking-widest mb-1">Initiate Protocol</span>
-                                <span className="text-white font-bold text-lg group-hover:text-bw-gold transition-colors">Enter The Nexus</span>
+                                <span className="text-white font-bold text-lg group-hover:text-bw-gold transition-colors">Enter The System</span>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
                         {/* HUD */}
                         <div className="absolute top-4 left-4 right-4 flex justify-between text-[10px] font-mono text-gray-500 uppercase">
                             <span>Target: Regional Blind Spots</span>
-                            <span>Parsing NSIL Stream...</span>
+                            <span>Parsing Economic Physics...</span>
                         </div>
                         
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -119,7 +119,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
                             <Radio className="w-4 h-4 animate-pulse" /> The Core Mandate
                         </h3>
                         <p className="text-gray-300 text-sm leading-relaxed relative z-10">
-                            "We don't guess. We calculate. By giving regional markets a standardized data language (NSIL™), we give them a fair chance to compete for global capital."
+                            "We don't guess. We calculate. By giving regional markets a standardized data language, we give them a fair chance to compete for global capital."
                         </p>
                     </div>
                 </motion.div>

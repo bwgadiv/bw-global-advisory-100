@@ -11,23 +11,23 @@ import { Service } from '../types';
 const CORE_TRINITY: Service[] = [
   {
     id: 'ivas',
-    title: 'IVAS™ Engine',
+    title: 'IVAS Engine',
     subtitle: 'Investment Viability Assessment',
-    description: 'Calculates the "Velocity of Capital." IVAS™ models how quickly an investment can actually be deployed in a specific region, factoring in bureaucratic friction, infrastructure lag, and local partner capability.',
+    description: 'Calculates the "Velocity of Capital." IVAS models how quickly an investment can actually be deployed in a specific region, factoring in bureaucratic friction, infrastructure lag, and local partner capability.',
     icon: <BarChart3 className="h-8 w-8 text-bw-gold" />,
   },
   {
     id: 'spi',
-    title: 'SPI™ Engine',
+    title: 'SPI Engine',
     subtitle: 'Strategic Partnership Index',
-    description: 'Measures "Symbiotic Fit." SPI™ moves beyond basic due diligence to analyze operational compatibility. It assigns a probability score to a partnership\'s long-term survival based on historical cultural and operational data.',
+    description: 'Measures "Symbiotic Fit." SPI moves beyond basic due diligence to analyze operational compatibility. It assigns a probability score to a partnership\'s long-term survival based on historical cultural and operational data.',
     icon: <Network className="h-8 w-8 text-bw-gold" />,
   },
   {
     id: 'scf',
-    title: 'SCF™ Engine',
+    title: 'SCF Engine',
     subtitle: 'Strategic Cash Flow',
-    description: 'Projects the "Knock-On Effect." SCF™ is a non-linear financial model that simulates second and third-order economic impacts, showing how a single investment creates ripples across the regional ecosystem.',
+    description: 'Projects the "Knock-On Effect." SCF is a non-linear financial model that simulates second and third-order economic impacts, showing how a single investment creates ripples across the regional ecosystem.',
     icon: <TrendingUp className="h-8 w-8 text-bw-gold" />,
   },
 ];
@@ -83,7 +83,7 @@ export const Services: React.FC = () => {
                                 <div className="text-[10px] font-mono text-stone-300 border-t border-white/20 pt-4 leading-relaxed">
                                     LOCATION: Pagadian City<br/>
                                     STATUS: Field Observation<br/>
-                                    RESULT: Nexus Kernel v1.0
+                                    RESULT: The Core Kernel v1.0
                                 </div>
                              </div>
                         </div>
@@ -105,33 +105,40 @@ export const Services: React.FC = () => {
                     
                     <div className="prose prose-lg text-stone-600 leading-relaxed space-y-6 text-sm md:text-base">
                         <p>
-                            We realized that Regional Reality and Global Capital speak different languages. No existing system translated between them. The "blind spots" of regional expansion—bureaucratic friction, cultural nuance, and latent assets—were <strong className="text-red-600">invisible to standard tools like SWOT or PESTLE.</strong>
+                            Regional economies face a critical visibility crisis. They hold immense value—latent assets, skilled labor, and rapid growth potential—but lack the structured data to prove it to the world.
                         </p>
                         <p>
-                            <strong>We operated on a premise that had never been tested:</strong> that regional chaos is actually a pattern waiting to be decoded. No one had ever connected the dots between hyper-local friction and high-level finance in a single, mathematical model. 
+                            We built the <strong>Regional Intelligence Core</strong> to solve this specific inequity. It is not a tool for extraction; it is an engine for connection. By translating local reality into global metrics, we ensure that no viable opportunity is lost to translation errors.
                         </p>
                         <p>
-                            We architected the <strong>Nexus OS™</strong> to solve this specific failure point. It is not a passive consultancy tool; it is the first deterministic engine designed to translate these "blind spots" into the language of global capital.
+                            This system is <strong>100% dedicated to regional development</strong>. It provides the same level of analytical rigor found in global financial centers, but is purpose-built to navigate the complexities of regional economic growth.
                         </p>
                     </div>
 
-                    {/* Research Validation Card */}
+                    {/* Regional Commitment Card */}
                     <div className="mt-8 p-6 bg-stone-50 border border-stone-200 rounded-sm">
                         <div className="flex items-center justify-between mb-3">
                             <h4 className="text-xs font-bold text-bw-navy uppercase tracking-widest flex items-center gap-2">
-                                <BookOpen className="w-4 h-4 text-bw-gold" />
-                                Research Validation: Framework Failure
+                                <Globe className="w-4 h-4 text-bw-gold" />
+                                System Dedication
                             </h4>
-                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase flex items-center gap-1">
-                                <CheckCircle2 size={10} /> Verified
+                            <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase flex items-center gap-1">
+                                <CheckCircle2 size={10} /> Committed
                             </span>
                         </div>
                         <p className="text-xs text-stone-500 leading-relaxed italic mb-3">
-                            "Evidence collected from 195 jurisdictions confirms that static models (SWOT/PESTLE) fail in 84% of high-volatility regional entries because they cannot calculate dynamic friction coefficients."
+                            "We architected this system to serve the 'blind spots' of the global economy. It is explicitly designed to calculate value in high-complexity, high-growth regional markets where standard tools fail."
                         </p>
-                        <p className="text-xs text-stone-500 leading-relaxed">
-                            "None of the engines below could exist without NSIL. They were built sequentially to solve the specific 'blind spots' identified in our research—bridging the gap between global capital expectation and regional reality. <strong>This is a 100% dedicated system to regional development, designed for anyone to use at an affordable cost.</strong>"
-                        </p>
+                        <div className="flex gap-4 pt-2 border-t border-stone-200">
+                            <div>
+                                <span className="block text-[10px] font-bold text-stone-400 uppercase">Target Markets</span>
+                                <span className="text-xs font-bold text-bw-navy">Emerging & Regional</span>
+                            </div>
+                            <div>
+                                <span className="block text-[10px] font-bold text-stone-400 uppercase">Mission</span>
+                                <span className="text-xs font-bold text-bw-navy">Visibility & Growth</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -157,11 +164,11 @@ export const Services: React.FC = () => {
                             <span className="text-xs font-bold text-bw-gold uppercase tracking-[0.2em]">Level 1: The Protocol</span>
                         </div>
                         <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight">
-                            NSIL™ <br/>
+                            NSIL <br/>
                             <span className="text-stone-500">Nexus Strategic Intelligence Layer</span>
                         </h2>
                         <p className="text-stone-400 text-lg leading-relaxed mb-8">
-                            Before the engines could be built, we had to invent the language they speak. <strong>NSIL™ was the first invention.</strong> It is the XML-based protocol designed specifically to standardize unstructured regional economic data into a coherent, machine-readable format.
+                            Before the engines could be built, we had to invent the language they speak. <strong>NSIL</strong> was the first invention. It is the XML-based protocol designed specifically to standardize unstructured regional economic data into a coherent, machine-readable format.
                         </p>
                         <div className="flex items-center gap-4 text-xs font-mono text-stone-500">
                             <span className="flex items-center gap-2"><GitBranch size={14} /> v4.2.0 Stable</span>
@@ -178,7 +185,7 @@ export const Services: React.FC = () => {
                                     <div className="w-px h-full bg-stone-800 mt-2"></div>
                                 </div>
                                 <div className="py-4">
-                                    <h4 className="text-xl font-bold text-white mb-2">Level 2: The Nexus Brain</h4>
+                                    <h4 className="text-xl font-bold text-white mb-2">Level 2: The Core Brain</h4>
                                     <p className="text-sm text-stone-400 leading-relaxed">
                                         The central processing unit that ingests NSIL data. It doesn't just read data; it understands <i>strategic intent</i>. It was developed immediately after NSIL to parse "Case Observations (CO)"—our proprietary dataset of failure points.
                                     </p>
@@ -188,7 +195,7 @@ export const Services: React.FC = () => {
                             <div className="p-6 border-l-2 border-bw-gold bg-bw-gold/5">
                                 <h5 className="font-bold text-bw-gold uppercase text-xs tracking-widest mb-3">Verification of Origin</h5>
                                 <p className="text-sm text-stone-300 italic leading-relaxed">
-                                    "We built this because the tools didn't exist. Standard consulting models are priced for the Fortune 500 and designed for stability. We built Nexus for the rest of the world—to operate in chaos, at a cost that democratizes intelligence."
+                                    "We built this because the tools didn't exist. Standard consulting models are priced for the Fortune 500 and designed for stability. We built The Core for the rest of the world—to operate in chaos, at a cost that democratizes intelligence."
                                 </p>
                             </div>
                         </div>
@@ -203,7 +210,7 @@ export const Services: React.FC = () => {
                 Level 3: The Applications
             </div>
             <h3 className="text-3xl font-serif font-bold text-bw-navy">The Core Trinity</h3>
-            <p className="text-stone-500 mt-2">The primary analytical outputs generated by the Nexus Brain.</p>
+            <p className="text-stone-500 mt-2">The primary analytical outputs generated by the Core Brain.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
@@ -247,7 +254,7 @@ export const Services: React.FC = () => {
                         <div className="text-stone-400 group-hover:text-bw-navy transition-colors">{eng.icon}</div>
                         <div className="text-[9px] font-bold text-stone-300 uppercase">{eng.cat}</div>
                     </div>
-                    <div className="text-lg font-bold text-bw-navy mb-1">{eng.acronym}™</div>
+                    <div className="text-lg font-bold text-bw-navy mb-1">{eng.acronym}</div>
                     <div className="text-[10px] font-medium text-stone-500 leading-tight">{eng.name}</div>
                 </div>
             ))}

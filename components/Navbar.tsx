@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { LayoutGrid, ChevronRight } from 'lucide-react';
 
@@ -28,9 +29,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSystem }) => {
             </div>
             <div className="flex flex-col">
                 <h1 className={`text-lg font-bold leading-none tracking-tight ${scrolled ? 'text-white' : 'text-white'}`}>
-                    BW Nexus AI
+                    BW Global AI
                 </h1>
-                <span className="text-[9px] text-bw-gold font-bold uppercase tracking-widest">Intelligence OS</span>
+                <span className="text-[9px] text-bw-gold font-bold uppercase tracking-widest">Intelligence Core</span>
             </div>
           </div>
 
