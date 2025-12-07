@@ -40,9 +40,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenSystem }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-bw-gold/10 border border-bw-gold/30 rounded-full text-bw-gold text-xs font-bold uppercase tracking-widest mb-6">
-                        <Binary size={14} /> The Intelligence Gap
-                    </div>
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-[1.1] mb-8">
                         We didn't just build a database. <br/>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-bw-gold to-white">

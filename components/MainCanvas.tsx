@@ -9,7 +9,8 @@ import {
   TrendingUp, BarChart3, Scale, Info, Building2, MousePointerClick, Flag, History, PenTool,
   Network, Cpu, MessageSquare, Mic, Share2, ListTodo, ToggleLeft, ToggleRight, CheckSquare, Square,
   BrainCircuit, HelpCircle, Mail, Loader2, DollarSign, Wallet, Crosshair, Lock, Fingerprint,
-  FileCheck, ScrollText, Compass, Printer, Edit3, ClipboardList, AlertOctagon, Eye, Microscope
+  FileCheck, ScrollText, Compass, Printer, Edit3, ClipboardList, AlertOctagon, Eye, Microscope,
+  Server, Lightbulb, Terminal
 } from 'lucide-react';
 import { ReportParameters, ReportData, GenerationPhase, LiveOpportunityItem, ReportSection, NeuroSymbolicState, CopilotInsight } from '../types';
 import { 
@@ -73,26 +74,30 @@ interface MainCanvasProps {
 
 // Map internal module IDs to display info
 const ENGINE_CATALOG = [
-    { id: 'Nexus Rocket Engine', label: 'Nexus Rocket Engine', desc: 'Latent Asset Identification (LAI) & IVAS Scoring.', icon: RocketIcon, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
-    { id: 'Symbiotic Matchmaking', label: 'Symbiotic Matchmaker', desc: 'Identify high-asymmetry partners globally.', icon: MatchMakerIcon, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-    { id: 'Historical Precedents', label: 'Historical Precedents', desc: 'Match strategy against 100 years of case studies.', icon: History, color: 'text-stone-600', bg: 'bg-stone-100', border: 'border-stone-200' },
-    { id: 'Temporal Phase Analysis', label: 'Temporal Phase Analysis', desc: 'Lifecycle stage detection & progression modeling.', icon: Clock, color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200' },
-    { id: 'Geopolitical Analysis', label: 'Geopolitical Forecast', desc: 'Regional stability, currency risk & trade barriers.', icon: GlobeIcon, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
-    { id: 'Governance Audit', label: 'Governance Audit', desc: 'Corruption index, regulatory friction & compliance.', icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-    { id: 'Deep Reasoning', label: 'Deep Reasoning', desc: 'Adversarial logic check: "Deal Killers" vs "Hidden Gems".', icon: Layout, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200' },
-    { id: 'Financial Modeling', label: 'Financial Modeling', desc: 'Strategic Cash Flow (SCF) & Predictive Growth.', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-    { id: 'Trade Simulator', label: 'Trade Simulator', desc: 'Supply chain shock modeling & tariff impact.', icon: ActivityIcon, color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
-    { id: 'Sentiment Engine', label: 'Sentiment Engine', desc: 'Public perception & brand risk analysis.', icon: MessageSquare, color: 'text-pink-600', bg: 'bg-pink-50', border: 'border-pink-200' },
+    { id: 'Nexus Rocket Engine', label: 'Nexus Rocket Engine', desc: 'Latent Asset Identification (LAI) & IVAS Scoring.', why: 'Crucial for measuring pure economic velocity.', icon: RocketIcon, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
+    { id: 'Symbiotic Matchmaking', label: 'Symbiotic Matchmaker', desc: 'Identify high-asymmetry partners globally.', why: 'Finds partners who need you as much as you need them.', icon: MatchMakerIcon, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+    { id: 'Historical Precedents', label: 'Historical Precedents', desc: 'Match strategy against 100 years of case studies.', why: 'Prevents repeating history\'s expensive mistakes.', icon: History, color: 'text-stone-600', bg: 'bg-stone-100', border: 'border-stone-200' },
+    { id: 'Temporal Phase Analysis', label: 'Temporal Phase Analysis', desc: 'Lifecycle stage detection & progression modeling.', why: 'Times your entry to the exact growth phase of the region.', icon: Clock, color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200' },
+    { id: 'Geopolitical Analysis', label: 'Geopolitical Forecast', desc: 'Regional stability, currency risk & trade barriers.', why: 'Maps invisible macro-threats before they materialize.', icon: GlobeIcon, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+    { id: 'Governance Audit', label: 'Governance Audit', desc: 'Corruption index, regulatory friction & compliance.', why: 'Quantifies the cost of bureaucracy and red tape.', icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+    { id: 'Deep Reasoning', label: 'Deep Reasoning', desc: 'Adversarial logic check: "Deal Killers" vs "Hidden Gems".', why: 'Acts as a "Devil\'s Advocate" to stress-test your logic.', icon: Layout, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200' },
+    { id: 'Financial Modeling', label: 'Financial Modeling', desc: 'Strategic Cash Flow (SCF) & Predictive Growth.', why: 'Projects 5-year capital efficiency scenarios.', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
+    { id: 'Trade Simulator', label: 'Trade Simulator', desc: 'Supply chain shock modeling & tariff impact.', why: 'Simulates logistics breakdowns to ensure resilience.', icon: ActivityIcon, color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
+    { id: 'Sentiment Engine', label: 'Sentiment Engine', desc: 'Public perception & brand risk analysis.', why: 'Gauges social license to operate in the region.', icon: MessageSquare, color: 'text-pink-600', bg: 'bg-pink-50', border: 'border-pink-200' },
 ];
 
-// Base Risk Categories for dynamic generation
+// Enhanced Risk Categories
 const BASE_RISK_CATEGORIES = [
     { id: 'regulatory', label: 'Regulatory Friction', icon: Scale },
     { id: 'currency', label: 'Currency Volatility', icon: TrendingUp },
     { id: 'supply', label: 'Supply Chain Fragility', icon: ActivityIcon },
     { id: 'labor', label: 'Labor/Talent Shortage', icon: Users },
-    { id: 'ip', label: 'IP Protection', icon: ShieldCheck },
+    { id: 'ip', label: 'IP / Data Sovereignty', icon: Lock },
     { id: 'political', label: 'Political Instability', icon: AlertOctagon },
+    { id: 'cyber', label: 'Cybersecurity Threat', icon: Server },
+    { id: 'climate', label: 'Environmental / Climate', icon: Globe },
+    { id: 'reputation', label: 'Social License / Reputation', icon: MessageSquare },
+    { id: 'infra', label: 'Infrastructure Reliability', icon: Building2 },
 ];
 
 const SelectOrInput = ({ label, value, options, onChange, placeholder = "Enter custom value...", fallbackList = [] }: any) => {
@@ -139,7 +144,7 @@ const NavButtons = ({ step, setStep, canNext, finalAction }: any) => (
         {step < 5 ? (
             <button onClick={() => setStep(step + 1)} disabled={!canNext} className="px-8 py-3 bg-stone-900 text-white font-bold rounded-lg hover:bg-black disabled:opacity-50 flex items-center gap-2 shadow-lg transition-all">Next Step <ArrowRight size={16} /></button>
         ) : (
-            <button onClick={finalAction} className="px-10 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-xl transition-all flex items-center gap-2 transform hover:-translate-y-1"><Fingerprint size={20} /> Sign-Off & Generate</button>
+            <button onClick={finalAction} className="px-10 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-xl transition-all flex items-center gap-2 transform hover:-translate-y-1"><Fingerprint size={20} /> Authorize & Execute</button>
         )}
     </div>
 );
@@ -176,10 +181,11 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     const [resultTab, setResultTab] = useState<'dossier' | 'simulation' | 'market'>('dossier');
     
     // Risk State
-    const [riskArea, setRiskArea] = useState(params.country || '');
     const [activeRisk, setActiveRisk] = useState<string | null>(null);
     const [riskAnalysisText, setRiskAnalysisText] = useState<string>('');
     const [isAnalyzingRisk, setIsAnalyzingRisk] = useState(false);
+    const [customRiskInput, setCustomRiskInput] = useState('');
+    const [customRisks, setCustomRisks] = useState<{id: string, label: string}[]>([]);
 
     // Scroll Container Ref
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -191,6 +197,9 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     const [strategicPosture, setStrategicPosture] = useState<string>('diplomatic');
     const [step5Context, setStep5Context] = useState<string>(''); // User commentary
     
+    // System Thinking State (for visual effects)
+    const [systemThinkingLog, setSystemThinkingLog] = useState<string[]>([]);
+
     const [neuroState, setNeuroState] = useState<NeuroSymbolicState>({
         checklist: INITIAL_CHECKLIST,
         formulas: INITIAL_FORMULAS,
@@ -218,12 +227,26 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         }
     }, [generationPhase]);
 
-    // Update risk area default if country changes
-    useEffect(() => {
-        if (params.country && (!riskArea || riskArea === 'Global')) {
-            setRiskArea(params.country);
+    const addToLog = (msg: string) => {
+        setSystemThinkingLog(prev => [...prev.slice(-4), msg]); // Keep last 5
+    };
+
+    // Engine Toggle Logic with Log Feedback
+    const toggleEngine = (engineLabel: string) => {
+        const current = (params.selectedModules as string[]) || [];
+        const isActive = current.includes(engineLabel);
+        const updated = isActive 
+            ? current.filter(item => item !== engineLabel)
+            : [...current, engineLabel];
+        
+        handleParamChange('selectedModules', updated);
+        
+        if (!isActive) {
+            addToLog(`[ARCH] ${engineLabel} ACTIVATED. Linking to ${params.country || 'Target'} context...`);
+        } else {
+            addToLog(`[ARCH] ${engineLabel} DEACTIVATED.`);
         }
-    }, [params.country]);
+    };
 
     // Enhanced Copilot Messaging for "Live Consultant" feel
     useEffect(() => {
@@ -238,9 +261,9 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         } else if (step === 3) {
              msg = { type: 'warning', title: 'Logic Gatekeeper', description: 'I am monitoring for strict compliance rules. If you have "Go/No-Go" financial covenants (e.g. Debt/EBITDA < 3x), tell me so I can lock the logic engine.', confidence: 100 };
         } else if (step === 4) {
-             msg = { type: 'insight', title: 'Full System Access', description: 'You have full control over the Intelligence Matrix. Activating more engines increases computation time but provides deeper cross-validation. I recommend keeping the Rocket Engine active.', confidence: 100 };
+             msg = { type: 'insight', title: 'Neural Architecture', description: 'Selecting specific engines triggers live data agents. Activating the "Rocket Engine" will enable Latent Asset Identification. Watch the System Logic Path on the right.', confidence: 100 };
         } else if (step === 5) {
-             msg = { type: 'question', title: 'Pre-Flight Verification', description: 'This is your final checkpoint. Please provide any additional context in the Executive Commentary field to refine the final output tone.', confidence: 100 };
+             msg = { type: 'question', title: 'Final Flight Check', description: 'This Dashboard is your "Pre-Summary Report". Verify all vectors before I compile the final PDF artifacts. Your "Readiness Score" dictates the depth of the generated output.', confidence: 100 };
         }
 
         if (msg) onCopilotMessage({ ...msg, id: Date.now().toString() });
@@ -265,6 +288,16 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         );
     };
 
+    const addCustomRisk = () => {
+        if (!customRiskInput.trim()) return;
+        const newId = `custom_${Date.now()}`;
+        setCustomRisks([...customRisks, { id: newId, label: customRiskInput }]);
+        // Automatically select it
+        const current = params.partnershipSupportNeeds || [];
+        handleParamChange('partnershipSupportNeeds', [...current, customRiskInput]);
+        setCustomRiskInput('');
+    };
+
     // Risk Analysis Simulation
     const handleRiskClick = async (riskId: string, riskLabel: string) => {
         setActiveRisk(riskId);
@@ -276,7 +309,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         
         // Mocking the "Deep Dive" content based on the location
         const mockDelay = 800;
-        const location = riskArea || params.country || "Target Region";
+        const location = params.country || "Target Region";
         
         setTimeout(() => {
             let analysis = "";
@@ -300,7 +333,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
     const handleGenerateReportWithOrchestrator = async () => {
         if (!briefingSigned) {
-            alert("You must verify and sign the Confidential Briefing before the system can release the final dossier.");
+            alert("You must verify the Mission Profile by checking the 'Authorize' box before the system can release the final dossier.");
             return;
         }
         onGenerate(); 
@@ -315,6 +348,22 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         } catch (error) {
             console.error("Orchestration failed:", error);
         }
+    };
+
+    // Calculate dynamic readiness score based on filled fields (Centralized logic)
+    const calculateReadiness = () => {
+        if (!params.organizationName || !params.country) return 0;
+        let score = 10; 
+        if (params.organizationType) score += 5;
+        if (params.industry.length > 0) score += 10;
+        if (params.problemStatement && params.problemStatement.length > 10) score += 15;
+        if (params.strategicIntent.length > 0) score += 15;
+        if (params.revenueBand) score += 5;
+        if (params.riskTolerance) score += 5;
+        if (params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0) score += 10;
+        if (params.selectedModules && params.selectedModules.length > 0) score += 25; // High weight for Step 4
+        
+        return Math.min(100, score);
     };
 
     // --- STEP RENDERING ---
@@ -447,7 +496,11 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         );
     };
 
-    const renderStep3_Calibration = () => (
+    const renderStep3_Calibration = () => {
+        // Merge base categories with custom ones
+        const allRisks = [...BASE_RISK_CATEGORIES, ...customRisks.map(r => ({ id: r.id, label: r.label, icon: AlertOctagon }))];
+
+        return (
         <div className="space-y-8 animate-in fade-in slide-in-from-left-4 mb-20">
             <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-white border border-stone-200 rounded-xl shadow-sm">
@@ -534,43 +587,48 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                             <p className="text-xs text-stone-500">Address specific regional concerns and calibrate risk models.</p>
                         </div>
 
-                        {/* Hyper-Local Context Input */}
-                        <div className="mb-6">
-                            <label className="text-xs font-bold text-stone-700 block mb-1 uppercase tracking-wide">Specific Area of Interest</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
-                                <input 
-                                    type="text" 
-                                    value={riskArea}
-                                    onChange={(e) => setRiskArea(e.target.value)}
-                                    placeholder="e.g. Ho Chi Minh City, District 1"
-                                    className="w-full p-2.5 pl-10 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none"
-                                />
-                            </div>
-                            <p className="text-[10px] text-stone-400 mt-1 italic">Enter a city or zone to get hyper-local risk intelligence.</p>
-                        </div>
-
                         {/* Risk Monitors Grid */}
                         <div className="flex-1">
-                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Active Risk Monitors</label>
+                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Active Risk Monitors (Select to Activate)</label>
                             <div className="grid grid-cols-2 gap-3 mb-6">
-                                {BASE_RISK_CATEGORIES.map((risk) => (
-                                    <button
-                                        key={risk.id}
-                                        onClick={() => handleRiskClick(risk.id, risk.label)}
-                                        className={`p-3 rounded-lg border text-left transition-all relative overflow-hidden group ${
-                                            activeRisk === risk.id 
-                                            ? 'bg-orange-50 border-orange-200 ring-1 ring-orange-200 shadow-sm' 
-                                            : 'bg-white border-stone-200 hover:border-orange-200 hover:shadow-sm'
-                                        }`}
-                                    >
-                                        <div className="flex items-center justify-between mb-1">
-                                            <risk.icon className={`w-4 h-4 ${activeRisk === risk.id ? 'text-orange-600' : 'text-stone-400 group-hover:text-orange-400'}`} />
-                                            {activeRisk === risk.id && <Eye className="w-3 h-3 text-orange-400 animate-pulse" />}
-                                        </div>
-                                        <div className={`text-xs font-bold ${activeRisk === risk.id ? 'text-stone-900' : 'text-stone-600'}`}>{risk.label}</div>
-                                    </button>
-                                ))}
+                                {allRisks.map((risk) => {
+                                    const isActive = (params.partnershipSupportNeeds || []).includes(risk.label);
+                                    return (
+                                        <button
+                                            key={risk.id}
+                                            onClick={() => handleRiskClick(risk.id, risk.label)}
+                                            className={`p-3 rounded-lg border text-left transition-all relative overflow-hidden group flex items-center gap-2 ${
+                                                isActive 
+                                                ? 'bg-orange-50 border-orange-300 ring-1 ring-orange-200 shadow-sm' 
+                                                : 'bg-white border-stone-200 hover:border-orange-200 hover:shadow-sm'
+                                            }`}
+                                        >
+                                            <div className={`p-1.5 rounded ${isActive ? 'bg-orange-200 text-orange-800' : 'bg-stone-100 text-stone-400'}`}>
+                                                <risk.icon className="w-3.5 h-3.5" />
+                                            </div>
+                                            <div className={`text-xs font-bold ${isActive ? 'text-stone-900' : 'text-stone-600'}`}>{risk.label}</div>
+                                            {isActive && <Eye className="w-3 h-3 text-orange-400 animate-pulse ml-auto" />}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Manual Entry */}
+                            <div className="mb-4 flex items-center gap-2">
+                                <input 
+                                    type="text" 
+                                    value={customRiskInput}
+                                    onChange={(e) => setCustomRiskInput(e.target.value)}
+                                    placeholder="Add Custom Risk Vector..."
+                                    className="flex-1 p-2 bg-stone-50 border border-stone-200 rounded text-xs focus:ring-2 focus:ring-orange-500 outline-none"
+                                />
+                                <button 
+                                    onClick={addCustomRisk}
+                                    disabled={!customRiskInput.trim()}
+                                    className="px-3 py-2 bg-stone-800 text-white rounded text-xs font-bold hover:bg-black transition-colors disabled:opacity-50"
+                                >
+                                    <Plus className="w-3 h-3" />
+                                </button>
                             </div>
 
                             {/* Deep Dive Inspector Panel */}
@@ -578,9 +636,9 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                                 <div className="bg-stone-900 text-stone-300 p-5 rounded-xl border border-stone-700 animate-in slide-in-from-top-2">
                                     <div className="flex items-center justify-between mb-3 border-b border-stone-700 pb-2">
                                         <h5 className="text-xs font-bold text-white uppercase flex items-center gap-2">
-                                            <Microscope className="w-3 h-3 text-orange-500" /> Deep Dive: {BASE_RISK_CATEGORIES.find(r => r.id === activeRisk)?.label}
+                                            <Microscope className="w-3 h-3 text-orange-500" /> Deep Dive: {allRisks.find(r => r.id === activeRisk)?.label}
                                         </h5>
-                                        <span className="text-[9px] font-mono text-stone-500">{riskArea || 'Global'} Context</span>
+                                        <span className="text-[9px] font-mono text-stone-500">{params.country || 'Global'} Context</span>
                                     </div>
                                     
                                     {isAnalyzingRisk ? (
@@ -600,7 +658,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                 </div>
             </div>
         </div>
-    );
+    )};
 
     const renderStep4_Architecture = () => {
         return (
@@ -610,87 +668,122 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                     <div><h3 className="text-xl font-serif font-bold text-stone-900">Intelligence Architecture</h3><p className="text-sm text-stone-500">Configure the active engine matrix and agent swarm for this mission.</p></div>
                 </div>
 
+                {/* Introductory Explanation */}
+                <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm mb-6">
+                    <h4 className="text-sm font-bold text-stone-900 mb-2">Designing the Analytical Brain</h4>
+                    <p className="text-xs text-stone-600 leading-relaxed max-w-3xl">
+                        You are configuring the "Neural Pathways" of the analysis. Each selected module activates a specific AI agent specialized in that domain (e.g., Financial Modeling, Geopolitics). 
+                        Activating more modules provides deeper cross-validation but increases computation time.
+                    </p>
+                </div>
+
                 {/* Auto-Provisioning Visual */}
                 <div className="bg-stone-50 p-8 rounded-xl shadow-sm border border-stone-200">
                     <div className="flex justify-between items-center mb-8 border-b border-orange-200 pb-4">
                         <div>
                             <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                <Layers className="w-4 h-4" /> System Configuration
+                                <Layers className="w-4 h-4" /> Neural Pathways Configuration
                             </h4>
                             <p className="text-xs text-stone-500">Select active modules for your analysis.</p>
                         </div>
                         <span className="text-xs font-mono text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 flex items-center gap-1">
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            {params.selectedModules?.length || 0} MODULES ACTIVE
+                            {params.selectedModules?.length || 0} PATHWAYS ACTIVE
                         </span>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {ENGINE_CATALOG.map((eng) => {
-                            const isActive = (params.selectedModules || []).includes(eng.label);
-                            return (
-                                <div 
-                                    key={eng.id} 
-                                    onClick={() => toggleArrayParam('selectedModules', eng.label)}
-                                    className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${
-                                        isActive 
-                                        ? 'bg-white border-blue-500 shadow-md ring-1 ring-blue-500' 
-                                        : 'bg-white border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100'
-                                    }`}
-                                >
-                                    <div className="flex justify-between items-start mb-2">
-                                        <div className={`p-2 rounded-lg ${isActive ? eng.bg : 'bg-stone-100'}`}>
-                                            <eng.icon className={`w-5 h-5 ${isActive ? eng.color : 'text-stone-400'}`} />
+                    <div className="space-y-6">
+                        {/* Core Analysis Group */}
+                        <div>
+                            <h5 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3 pl-1">Core Analysis Engines</h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {ENGINE_CATALOG.slice(0, 4).map((eng) => {
+                                    const isActive = (params.selectedModules || []).includes(eng.label);
+                                    return (
+                                        <div 
+                                            key={eng.id} 
+                                            onClick={() => toggleEngine(eng.label)}
+                                            className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${
+                                                isActive 
+                                                ? 'bg-white border-blue-500 shadow-md ring-1 ring-blue-500' 
+                                                : 'bg-white border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100'
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div className={`p-2 rounded-lg ${isActive ? eng.bg : 'bg-stone-100'}`}>
+                                                    <eng.icon className={`w-5 h-5 ${isActive ? eng.color : 'text-stone-400'}`} />
+                                                </div>
+                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isActive ? 'bg-blue-500 border-blue-500' : 'border-stone-300'}`}>
+                                                    {isActive && <CheckCircle2 className="w-3 h-3 text-white" />}
+                                                </div>
+                                            </div>
+                                            <h5 className={`font-bold text-sm ${isActive ? 'text-stone-900' : 'text-stone-500'}`}>{eng.label}</h5>
+                                            <p className="text-[10px] text-stone-500 mt-1 leading-tight">{eng.desc}</p>
+                                            
+                                            {/* Enhanced "Why" tooltip/block */}
+                                            {isActive && (
+                                                <div className="mt-2 pt-2 border-t border-stone-100 text-[9px] text-blue-600 font-medium bg-blue-50/50 p-1 rounded">
+                                                    Why: {eng.why}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isActive ? 'bg-blue-500 border-blue-500' : 'border-stone-300'}`}>
-                                            {isActive && <CheckCircle2 className="w-3 h-3 text-white" />}
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Specialized/Deep Dive Group */}
+                        <div>
+                            <h5 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3 pl-1">Deep Dive Simulations</h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {ENGINE_CATALOG.slice(4).map((eng) => {
+                                    const isActive = (params.selectedModules || []).includes(eng.label);
+                                    return (
+                                        <div 
+                                            key={eng.id} 
+                                            onClick={() => toggleEngine(eng.label)}
+                                            className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${
+                                                isActive 
+                                                ? 'bg-white border-purple-500 shadow-md ring-1 ring-purple-500' 
+                                                : 'bg-white border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100'
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div className={`p-2 rounded-lg ${isActive ? eng.bg : 'bg-stone-100'}`}>
+                                                    <eng.icon className={`w-5 h-5 ${isActive ? eng.color : 'text-stone-400'}`} />
+                                                </div>
+                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isActive ? 'bg-purple-500 border-purple-500' : 'border-stone-300'}`}>
+                                                    {isActive && <CheckCircle2 className="w-3 h-3 text-white" />}
+                                                </div>
+                                            </div>
+                                            <h5 className={`font-bold text-sm ${isActive ? 'text-stone-900' : 'text-stone-500'}`}>{eng.label}</h5>
+                                            <p className="text-[10px] text-stone-500 mt-1 leading-tight">{eng.desc}</p>
+                                            
+                                            {/* Enhanced "Why" tooltip/block */}
+                                            {isActive && (
+                                                <div className="mt-2 pt-2 border-t border-stone-100 text-[9px] text-purple-600 font-medium bg-purple-50/50 p-1 rounded">
+                                                    Why: {eng.why}
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                    <h5 className={`font-bold text-sm ${isActive ? 'text-stone-900' : 'text-stone-500'}`}>{eng.label}</h5>
-                                    <p className="text-[10px] text-stone-500 mt-1 leading-tight">{eng.desc}</p>
-                                </div>
-                            );
-                        })}
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-stone-200">
-                        <div className="flex justify-between items-center mb-4">
-                            <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest flex items-center gap-2">
-                                <Users className="w-4 h-4" /> Active Agent Swarm
-                            </h4>
-                            <span className="text-xs text-stone-500">{params.selectedAgents?.length || 0} Agents Deployed</span>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2">
-                            {AVAILABLE_AGENTS.map((agent) => {
-                                const isAgentActive = (params.selectedAgents || []).includes(agent);
-                                return (
-                                    <button
-                                        key={agent}
-                                        onClick={() => toggleArrayParam('selectedAgents', agent)}
-                                        className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all flex items-center gap-2 ${
-                                            isAgentActive
-                                            ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
-                                            : 'bg-white text-stone-500 border-stone-200 hover:border-stone-400'
-                                        }`}
-                                    >
-                                        {agent}
-                                        {isAgentActive && <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Copilot Note */}
-                <div className="flex items-start gap-4 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-                    <MessageSquare className="w-5 h-5 text-blue-600 mt-1" />
-                    <div>
-                        <h5 className="text-sm font-bold text-blue-900">Consultant's Note</h5>
-                        <p className="text-xs text-blue-800 leading-relaxed mt-1">
-                            I have pre-selected the optimal configuration based on your {params.industry[0]} focus in {params.country}. You can add or remove modules above to tailor the analysis depth.
-                        </p>
+                    {/* Simulate Logic Button */}
+                    <div className="mt-8 pt-6 border-t border-stone-200 flex justify-end">
+                        <button 
+                            onClick={() => {
+                                addToLog("[SIM] Running Agent Handshake Protocol...");
+                                setTimeout(() => addToLog("[SIM] Scout Agent connected to Financial Agent."), 800);
+                                setTimeout(() => addToLog("[SIM] Latency check: 12ms. All systems green."), 1600);
+                            }}
+                            className="text-xs font-bold text-stone-500 hover:text-stone-900 flex items-center gap-2"
+                        >
+                            <Play className="w-3 h-3" /> Simulate Logic Flow
+                        </button>
                     </div>
                 </div>
             </div>
@@ -698,196 +791,132 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     };
 
     const renderStep5_Output = () => {
-        // PRE-FLIGHT DASHBOARD & STATEMENT OF WORK GENERATOR
+        const readiness = calculateReadiness();
         
-        // Mock early AI Opinion based on params
-        const generatePreAssessment = () => {
-            if (!params.country || !params.industry[0]) return "Insufficient data for pre-assessment.";
-            
-            const riskLevel = params.riskTolerance === 'high' ? "aggressive" : "measured";
-            return `Based on your intent to enter ${params.country} with a ${riskLevel} strategy in the ${params.industry[0]} sector, the Nexus Engine detects high regulatory friction but significant labor arbitrage opportunities. We recommend focusing the analysis on Supply Chain Resilience and Local Governance Mapping.`;
-        };
-
-        const preAssessment = generatePreAssessment();
-        const targetSummary = `${params.country || 'Global'} (${params.region || 'Region'})`;
-        const budgetSummary = params.calibration?.constraints?.budgetCap || 'Unspecified';
-        const riskSummary = params.riskTolerance || 'Medium';
-        
-        // Generate dynamic letter content based on selections and user input
-        const generateLiveLetter = () => {
-            const today = new Date().toLocaleDateString();
-            const deliverablesText = selectedDeliverables.map(d => {
-                if(d === 'dossier') return 'Executive Intelligence Dossier';
-                if(d === 'gov_letter') return 'Government Relations Strategy';
-                if(d === 'financial_model') return 'Strategic Cash Flow (SCF) Model';
-                if(d === 'risk_matrix') return 'Geopolitical Risk Matrix';
-                return d;
-            }).join(', ');
-
-            return `To: ${params.userName || 'Principal'},\n\n` +
-                   `Date: ${today}\n` +
-                   `Subject: Statement of Work & Strategic Mandate for ${params.organizationName || 'Entity'} in ${params.country || 'Target Region'}\n\n` +
-                   `The Nexus Intelligence System has ingested your parameters. We understand your core objective is to execute a **${params.strategicIntent || 'Strategic Initiative'}** within the **${params.industry[0] || 'Target'}** sector of **${params.country || 'the region'}**.\n\n` +
-                   `**Preliminary Assessment:**\n` +
-                   `${preAssessment}\n\n` +
-                   `**Scope of Analysis:**\n` +
-                   `Our analysis will be calibrated to a risk tolerance level of **${riskSummary}**, utilizing a capital structure framework capped at **${budgetSummary}**.\n` +
-                   `We have activated the relevant **Political Risk**, **Supply Chain**, and **Financial Viability** engines to stress-test this mandate against 100 years of historical precedent.\n\n` +
-                   `**Executive Context:**\n` +
-                   `${step5Context ? step5Context : '(No additional context provided)'}\n\n` +
-                   `**Deliverables Manifest:**\n` + 
-                   `Based on your selection, we will generate: ${deliverablesText}.\n\n` +
-                   `**Strategic Posture:**\n` +
-                   `The analysis will adopt a **${strategicPosture}** tone to align with your market entry style.\n\n` +
-                   `Please confirm this accurately reflects your intent. Upon signature, we will generate the classified dossier.`;
-        };
-
         return (
             <div className="space-y-8 animate-in fade-in slide-in-from-left-4 mb-20">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 bg-white border border-stone-200 rounded-xl shadow-sm"><Lock className="w-6 h-6 text-stone-700" /></div>
-                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Pre-Flight Command Dashboard</h3><p className="text-sm text-stone-500">Refine mission parameters, provide executive context, and confirm deliverables.</p></div>
+                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Mission Profile Validation</h3><p className="text-sm text-stone-500">Review all inputs, verify mission readiness, and authorize final generation.</p></div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
-                    {/* 1. Nexus Preliminary Assessment (Early Opinion) */}
-                    <div className="bg-gradient-to-r from-stone-900 to-stone-800 text-white rounded-xl p-6 shadow-md border border-stone-700">
-                        <div className="flex items-center gap-2 mb-3">
-                            <BrainCircuit className="w-5 h-5 text-bw-gold" />
-                            <h4 className="text-sm font-bold uppercase tracking-widest text-bw-gold">Nexus Preliminary Assessment</h4>
-                        </div>
-                        <p className="text-sm leading-relaxed text-stone-200 italic">
-                            "{preAssessment}"
-                        </p>
-                    </div>
-
-                    {/* 2. Executive Context Input */}
-                    <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
-                        <div className="flex items-center gap-2 mb-4 border-b border-orange-200 pb-2">
-                            <Edit3 className="w-4 h-4 text-orange-600" />
-                            <h4 className="text-sm font-bold text-orange-600 uppercase tracking-wide">Executive Commentary</h4>
-                        </div>
-                        <p className="text-xs text-stone-500 mb-3">Provide additional context, specific constraints, or nuance that the system should consider during generation.</p>
-                        <textarea 
-                            value={step5Context}
-                            onChange={(e) => setStep5Context(e.target.value)}
-                            className="w-full p-4 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-stone-800 outline-none min-h-[120px]"
-                            placeholder="e.g. 'We are particularly concerned about IP protection in this region. Prioritize legal safeguards over speed of entry.'"
-                        />
-                    </div>
-
-                    {/* 3. Deliverables & Approach Configuration */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Output Selection */}
-                        <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
-                            <div className="border-b border-orange-200 pb-4 mb-4">
-                                <h4 className="text-sm font-bold text-orange-600 uppercase tracking-wide flex items-center gap-2">
-                                    <ClipboardList className="w-4 h-4" /> Deliverable Matrix
-                                </h4>
-                                <p className="text-xs text-stone-500 mt-1">Select the artifacts you need generated.</p>
-                            </div>
-                            <div className="space-y-3">
-                                {[
-                                    { id: 'dossier', label: 'Executive Intelligence Dossier', desc: 'Full strategic report (PDF)' },
-                                    { id: 'gov_letter', label: 'Government Relations Letter', desc: 'Formal diplomatic outreach' },
-                                    { id: 'financial_model', label: 'Financial Projection Model', desc: 'Excel-ready cash flow analysis' },
-                                    { id: 'risk_matrix', label: 'Operational Risk Matrix', desc: 'Detailed threat assessment' }
-                                ].map(item => {
-                                    const isSelected = selectedDeliverables.includes(item.id);
-                                    return (
-                                        <div 
-                                            key={item.id} 
-                                            onClick={() => toggleDeliverable(item.id)}
-                                            className={`flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer ${isSelected ? 'bg-orange-50 border-orange-200' : 'bg-white border-stone-100 hover:bg-stone-50'}`} 
-                                        >
-                                            <div className={`mt-1 w-4 h-4 rounded border flex items-center justify-center ${isSelected ? 'bg-orange-600 border-orange-600' : 'border-stone-300'}`}>
-                                                {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
-                                            </div>
-                                            <div>
-                                                <div className={`text-sm font-bold ${isSelected ? 'text-orange-900' : 'text-stone-800'}`}>{item.label}</div>
-                                                <div className="text-xs text-stone-500">{item.desc}</div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* Strategic Approach */}
-                        <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
-                            <div className="border-b border-blue-200 pb-4 mb-4">
-                                <h4 className="text-sm font-bold text-blue-600 uppercase tracking-wide flex items-center gap-2">
-                                    <Compass className="w-4 h-4" /> Strategic Posture
-                                </h4>
-                                <p className="text-xs text-stone-500 mt-1">Define the tone and aggression level of the output.</p>
-                            </div>
-                            <div className="space-y-3">
-                                {[
-                                    { id: 'aggressive', label: 'Aggressive Expansion', desc: 'Focus on speed, disruption, and market capture.' },
-                                    { id: 'diplomatic', label: 'Diplomatic Entry', desc: 'Focus on compliance, partnership, and government relations.' },
-                                    { id: 'conservative', label: 'Risk-Averse Pilot', desc: 'Focus on minimal capital exposure and testing.' }
-                                ].map(style => (
-                                    <div 
-                                        key={style.id} 
-                                        onClick={() => setStrategicPosture(style.id)}
-                                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${strategicPosture === style.id ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-200' : 'bg-white border-stone-100 hover:bg-stone-50'}`}
-                                    >
-                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${strategicPosture === style.id ? 'border-blue-600' : 'border-stone-300'}`}>
-                                            {strategicPosture === style.id && <div className="w-2 h-2 rounded-full bg-blue-600" />}
-                                        </div>
-                                        <div>
-                                            <div className="text-sm font-bold text-stone-800">{style.label}</div>
-                                            <div className="text-xs text-stone-500">{style.desc}</div>
-                                        </div>
+                    {/* LEFT COLUMN: The Consolidated Profile (Pre-Summary Report) */}
+                    <div className="space-y-6">
+                        {/* 1. Core Mandate Summary */}
+                        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Core Mandate Summary</h4>
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <p className="text-[10px] text-stone-500 uppercase font-bold">Organization Target</p>
+                                        <p className="text-sm font-bold text-stone-900">{params.organizationName || 'Pending'}</p>
+                                        <p className="text-xs text-stone-500">{params.organizationType}</p>
                                     </div>
-                                ))}
+                                    <div className="text-right">
+                                        <p className="text-[10px] text-stone-500 uppercase font-bold">Jurisdiction</p>
+                                        <p className="text-sm font-bold text-stone-900">{params.country || 'Pending'}</p>
+                                        <p className="text-xs text-stone-500">{params.region}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-stone-50 p-3 rounded border border-stone-100">
+                                    <p className="text-[10px] text-stone-500 uppercase font-bold mb-1">Strategic Objective</p>
+                                    <p className="text-xs text-stone-700 italic">"{params.problemStatement || 'No objective defined.'}"</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* 4. The Statement of Work (Letter) */}
-                    <div className="bg-white p-8 rounded-xl shadow-lg border border-stone-200 relative overflow-hidden">
-                        {/* Watermark */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem] font-serif opacity-[0.02] pointer-events-none select-none">
-                            CONFIDENTIAL
-                        </div>
-
-                        <div className="relative z-10">
-                            <div className="flex justify-between items-start mb-8 border-b-2 border-stone-900 pb-6">
+                        {/* 2. Operational Chassis */}
+                        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Operational Chassis</h4>
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <h2 className="text-2xl font-bold font-serif text-stone-900">Statement of Work & Strategic Understanding</h2>
-                                    <p className="text-sm text-stone-500 mt-1">To: {params.userName}, {params.userDepartment}</p>
+                                    <p className="text-[10px] text-stone-500 uppercase font-bold">Risk Tolerance</p>
+                                    <p className="text-sm font-bold text-stone-900">{params.riskTolerance || 'Not Set'}</p>
                                 </div>
-                                <div className="text-right">
-                                    <div className="text-xs font-bold text-stone-400 uppercase tracking-widest">Date</div>
-                                    <div className="font-mono text-sm">{new Date().toLocaleDateString()}</div>
+                                <div>
+                                    <p className="text-[10px] text-stone-500 uppercase font-bold">Capital Structure</p>
+                                    <p className="text-sm font-bold text-stone-900">{params.calibration?.constraints?.budgetCap || 'Uncapped'}</p>
+                                </div>
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-stone-100">
+                                <p className="text-[10px] text-stone-500 uppercase font-bold mb-2">Active Risk Monitors</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0 ? (
+                                        params.partnershipSupportNeeds.map((risk, i) => (
+                                            <span key={i} className="px-2 py-1 bg-red-50 text-red-700 border border-red-100 rounded text-[10px] font-bold">{risk}</span>
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-stone-400 italic">None selected.</span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Intelligence Grid & Readiness */}
+                    <div className="space-y-6">
+                        {/* 3. Intelligence Grid */}
+                        <div className="bg-stone-900 text-white p-6 rounded-xl border border-stone-700 shadow-lg relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                                <Cpu size={80} />
+                            </div>
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-700 pb-2">Intelligence Grid Status</h4>
+                            
+                            <div className="space-y-3 mb-6">
+                                <div className="flex justify-between items-center text-xs">
+                                    <span className="text-stone-400">Active Engines</span>
+                                    <span className="font-mono text-green-400">{params.selectedModules?.length || 0} Online</span>
+                                </div>
+                                <div className="flex justify-between items-center text-xs">
+                                    <span className="text-stone-400">Agent Swarm</span>
+                                    <span className="font-mono text-green-400">{params.selectedAgents?.length || 0} Deployed</span>
                                 </div>
                             </div>
 
-                            <div className="prose prose-stone max-w-none text-sm leading-relaxed mb-8 whitespace-pre-line bg-stone-50 p-6 rounded-lg border border-stone-200 font-serif">
-                                {generateLiveLetter()}
-                            </div>
-
-                            <div className="bg-stone-50 p-6 rounded-lg border border-stone-200 flex justify-between items-center">
-                                <div className="flex items-center gap-3">
-                                    <input 
-                                        type="checkbox" 
-                                        id="sign-off" 
-                                        checked={briefingSigned} 
-                                        onChange={(e) => setBriefingSigned(e.target.checked)}
-                                        className="w-5 h-5 rounded border-stone-300 text-stone-900 focus:ring-stone-900 cursor-pointer" 
-                                    />
-                                    <label htmlFor="sign-off" className="text-sm font-bold text-stone-700 cursor-pointer select-none">
-                                        I verify this briefing is accurate and authorize generation.
-                                    </label>
+                            {/* Readiness Gauge */}
+                            <div className="text-center pt-4 border-t border-stone-700">
+                                <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2">Mission Readiness Score</p>
+                                <div className="relative inline-flex items-center justify-center">
+                                    <svg className="w-24 h-24 transform -rotate-90">
+                                        <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-stone-800" />
+                                        <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="transparent" strokeDasharray={251.2} strokeDashoffset={251.2 - (251.2 * readiness) / 100} className={`${readiness > 80 ? 'text-green-500' : readiness > 50 ? 'text-yellow-500' : 'text-red-500'} transition-all duration-1000`} />
+                                    </svg>
+                                    <span className="absolute text-2xl font-black">{readiness}%</span>
                                 </div>
-                                {briefingSigned && (
-                                    <div className="text-xs text-green-600 font-bold flex items-center gap-1 animate-in fade-in">
-                                        <CheckCircle2 size={14} /> Signed Digitally
-                                    </div>
-                                )}
+                                <p className="text-xs text-stone-400 mt-2 italic">
+                                    {readiness > 80 ? "Systems optimal for generation." : "Review required before proceeding."}
+                                </p>
                             </div>
+                        </div>
+
+                        {/* 4. Authorization */}
+                        <div className="bg-white p-6 rounded-xl border-2 border-stone-200 shadow-sm flex flex-col justify-center">
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">Command Authorization</h4>
+                            
+                            <div className="flex items-center gap-3 mb-4">
+                                <input 
+                                    type="checkbox" 
+                                    id="sign-off" 
+                                    checked={briefingSigned} 
+                                    onChange={(e) => setBriefingSigned(e.target.checked)}
+                                    className="w-5 h-5 rounded border-stone-300 text-stone-900 focus:ring-stone-900 cursor-pointer" 
+                                />
+                                <label htmlFor="sign-off" className="text-sm font-bold text-stone-700 cursor-pointer select-none">
+                                    I verify this mission profile is accurate.
+                                </label>
+                            </div>
+                            
+                            {briefingSigned && (
+                                <div className="text-xs text-green-600 font-bold flex items-center gap-1 animate-in fade-in bg-green-50 p-2 rounded border border-green-100 mb-2">
+                                    <CheckCircle2 size={14} /> Profile Locked & Signed
+                                </div>
+                            )}
+                            
+                            <p className="text-[10px] text-stone-400 leading-tight">
+                                By signing off, you authorize the Nexus AI to utilize the selected engines and agents to generate the final classified dossier.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -953,32 +982,12 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
     const LivePreview = () => {
         // Calculate dynamic readiness score based on filled fields
-        const calculateReadiness = () => {
-            // Strict Gate: No score until Name AND Country are present
-            if (!params.organizationName || !params.country) return 0;
-
-            let score = 0; 
-            
-            // Base score for passing the gate
-            score += 10; 
-
-            if (params.organizationType) score += 5;
-            if (params.industry.length > 0) score += 10;
-            if (params.problemStatement && params.problemStatement.length > 10) score += 20;
-            if (params.strategicIntent.length > 0) score += 15;
-            if (params.revenueBand) score += 10;
-            if (params.riskTolerance) score += 10;
-            if (params.selectedAgents.length > 0) score += 10;
-            
-            return Math.min(99, score);
-        };
-
         const readiness = calculateReadiness();
         
         // Dynamic Header Logic: Title, Ref, Status evolve with input
         let statusText = "Awaiting Initialization";
         let refText = "UNREGISTERED";
-        let reportTitle = params.reportName || "Untitled Mission";
+        let reportTitle = params.reportName || "Draft Mission Profile";
 
         if (readiness === 0) {
             statusText = "Awaiting Core Inputs";
@@ -1008,7 +1017,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                     <h2 className="text-2xl font-serif font-bold text-stone-400 uppercase tracking-widest mb-2">System Standby</h2>
                     <div className="h-1 w-12 bg-stone-300 rounded-full mb-4"></div>
                     <p className="text-stone-500 text-sm max-w-xs leading-relaxed">
-                        Awaiting organization profile and mission parameters to initialize dossier generation.
+                        Awaiting organization profile and mission parameters to initialize the summary report.
                     </p>
                     <div className="mt-8 flex gap-2">
                         <div className="w-2 h-2 rounded-full bg-red-400 animate-bounce"></div>
@@ -1029,7 +1038,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                         <div>
                             <div className="flex items-center gap-2 mb-2">
                                 <div className={`w-2 h-2 rounded-full ${readiness > 60 ? 'bg-green-500' : 'bg-amber-500'} animate-pulse`}></div>
-                                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Confidential Briefing</span>
+                                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Live Mission Profile</span>
                             </div>
                             <h2 className="text-3xl font-serif font-bold text-stone-900 leading-tight transition-all duration-300">{reportTitle}</h2>
                             <p className="text-stone-500 mt-2 text-sm font-mono uppercase tracking-wide flex items-center gap-2">
@@ -1071,31 +1080,60 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                             </div>
                         </div>
 
-                        {/* 2. Nexus Assessment (AI Perspective) */}
-                        {step >= 2 && (
-                            <div className="bg-stone-50 rounded-lg p-5 border border-stone-200 animate-in fade-in slide-in-from-bottom-2">
-                                {/* UPDATE: Orange header */}
-                                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-3 flex items-center gap-2 border-b border-orange-200 pb-1">
-                                    <BrainCircuit className="w-4 h-4" /> Nexus Assessment
-                                </h4>
-                                <p className="text-sm text-stone-700 leading-relaxed font-medium">
-                                    {params.problemStatement 
-                                        ? `I have analyzed your directive. The core challenge appears to be ${params.problemStatement.length > 50 ? 'complex market entry' : 'structural optimization'}. To solve this, I will cross-reference your specific constraints against 100 years of historical precedent in ${params.region || 'the target region'}.`
-                                        : "Awaiting core problem statement to formulate strategic assessment."}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* 3. Proposed Architecture */}
-                        {step >= 3 && (
-                            <div className="animate-in fade-in slide-in-from-bottom-2">
-                                {/* UPDATE: Orange header */}
-                                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-3 border-b border-orange-200 pb-1">Architecture Verified</h4>
-                                <div className="p-3 bg-green-50 border border-green-100 rounded-lg text-xs text-green-800 font-medium flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4" /> System engines have been auto-calibrated to {params.country}.
+                        {/* 2. System Logic Path (New Section) */}
+                        <div className="bg-stone-900 rounded-lg p-5 border border-stone-700 animate-in fade-in">
+                            <h4 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-3 flex items-center gap-2 border-b border-stone-800 pb-1">
+                                <Terminal className="w-4 h-4" /> System Logic Path
+                            </h4>
+                            <div className="space-y-2 text-xs font-mono text-stone-400 h-32 overflow-y-auto custom-scrollbar">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                    <span>System Initialized. Awaiting core inputs...</span>
                                 </div>
+                                {params.organizationName && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                        <span>Ingesting entity profile: <span className="text-white">{params.organizationName}</span></span>
+                                    </div>
+                                )}
+                                {params.industry.length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                        <span className="text-blue-400">Detected {params.industry[0]} Sector -> Activating Competitor Map...</span>
+                                    </div>
+                                )}
+                                {params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                        <span className="text-orange-400">High-Risk Vectors Identified: {params.partnershipSupportNeeds.length} active monitors.</span>
+                                    </div>
+                                )}
+                                {systemThinkingLog.map((log, i) => (
+                                    <div key={i} className="flex items-center gap-2 animate-in slide-in-from-left-2">
+                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                        <span className="text-purple-400">{log}</span>
+                                    </div>
+                                ))}
+                                <div className="animate-pulse text-green-500 font-bold">_</div>
                             </div>
-                        )}
+                        </div>
+
+                        {/* 3. Copilot Intervention (New Section) */}
+                        <div className="bg-white border-2 border-dashed border-stone-200 rounded-lg p-5 animate-in fade-in shadow-sm relative overflow-hidden group cursor-pointer hover:border-blue-300 transition-colors" onClick={() => onCopilotMessage && onCopilotMessage({type: 'question', title: 'User Query', description: 'I need to refine this summary report.', id: Date.now().toString()})}>
+                            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                <Lightbulb size={60} />
+                            </div>
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <BrainCircuit className="w-4 h-4" /> Copilot Intervention
+                            </h4>
+                            <p className="text-sm text-stone-600 leading-relaxed font-medium pr-8">
+                                "Does this profile accurately reflect your strategic intent? If not, ask me to refine the mission parameters or add specific constraints."
+                            </p>
+                            <div className="mt-4 flex items-center gap-2 text-xs text-blue-600 font-bold group-hover:underline">
+                                Click to consult Copilot <ArrowRight className="w-3 h-3" />
+                            </div>
+                        </div>
+
                     </div>
 
                     {/* Footer / Agreement */}
@@ -1122,7 +1160,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                 <div className="max-w-3xl mx-auto w-full">
                     <div className="mb-8">
                         <button onClick={() => setStep(Math.max(1, step - 1) as any)} disabled={step === 1} className="text-stone-400 hover:text-stone-800 mb-4 flex items-center gap-1 text-xs font-bold uppercase tracking-wider disabled:opacity-0 transition-opacity"><ChevronLeft size={14} /> Back</button>
-                        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">{step === 1 && "Establish Organization DNA"}{step === 2 && "Strategic Mandate"}{step === 3 && "Operational Mechanics"}{step === 4 && "Intelligence Architecture"}{step === 5 && "Confidential Briefing"}</h1>
+                        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">{step === 1 && "Establish Organization DNA"}{step === 2 && "Strategic Mandate"}{step === 3 && "Operational Mechanics"}{step === 4 && "Intelligence Architecture"}{step === 5 && "Mission Profile Validation"}</h1>
                         <p className="text-stone-500 text-sm">{step === 1 && "Deep entity profiling: define scale, authority, and identity."}{step === 2 && "Define specific mission vectors, priorities, and success metrics."}{step === 3 && "Calibrate risk, procurement, and financial constraints."}{step === 4 && "System auto-provisions AI agents based on mission profile."}{step === 5 && "Verify strategic understanding before generating final dossier."}</p>
                     </div>
                     <div className="flex items-center space-x-2 mb-8">{[1, 2, 3, 4, 5, 6].map(num => (<React.Fragment key={num}><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === num ? 'bg-stone-900 text-white shadow-md scale-110' : step > num ? 'bg-green-500 text-white' : 'bg-stone-200 text-stone-500'}`}>{step > num ? <CheckCircle2 size={14} /> : num}</div>{num < 6 && <div className={`h-1 w-8 rounded-full ${step > num ? 'bg-green-500' : 'bg-stone-200'}`} />} </React.Fragment>))}</div>
