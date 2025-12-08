@@ -1,41 +1,111 @@
 
-import React, { useState, useEffect } from 'react';
-import { Moon, Shield, Flame, Terminal, MessageSquare, ArrowRight, Activity } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Terminal, MessageSquare, ArrowRight, Activity } from 'lucide-react';
 
 const USE_CASES = [
     {
         title: "The 2 AM Epiphany",
-        icon: <Moon className="w-6 h-6 text-indigo-400" />,
         quote: "Woke up with a concern about currency risk? Don't wait for Monday.",
-        action: "Type it into the Workbench. Get a risk mitigation strategy before breakfast."
+        action: "Type it into the Workbench. Get a risk mitigation strategy before breakfast.",
+        gradient: "from-indigo-500/20 to-transparent",
+        border: "group-hover:border-indigo-500/50"
     },
     {
         title: "The Silent Board Member",
-        icon: <Shield className="w-6 h-6 text-emerald-400" />,
         quote: "In a negotiation? Feed the counter-party's terms into the Notepad.",
-        action: "Let the AI run a 'Deal Killer' analysis in the background while you talk."
+        action: "The system runs a 'Deal Killer' analysis in real-time, flagging critical risks while you negotiate.",
+        gradient: "from-emerald-500/20 to-transparent",
+        border: "group-hover:border-emerald-500/50"
     },
     {
         title: "The Devil's Advocate",
-        icon: <Flame className="w-6 h-6 text-red-400" />,
         quote: "Think your strategy is perfect? Ask the Workbench to 'Attack this Plan.'",
-        action: "It will simulate adversarial scenarios to find your blind spots."
+        action: "It will simulate adversarial scenarios to find your blind spots.",
+        gradient: "from-orange-500/20 to-transparent",
+        border: "group-hover:border-orange-500/50"
     }
+];
+
+const SYSTEM_LOGS = [
+    { time: '00:01', label: 'DETECTED INTENT:', value: 'Logistics Risk / Supply Chain', color: 'text-blue-400' },
+    { time: '00:01', label: 'CONTEXT:', value: 'Vietnam Region', color: 'text-stone-500' },
+    { time: '00:02', label: 'ACTIVATING:', value: 'Trade Disruption Simulator', color: 'text-purple-400' },
+    { time: '00:02', label: 'LOADING:', value: 'Historical Port Congestion Index', color: 'text-stone-500' },
+    { time: '00:03', label: 'RETRIEVING:', value: 'Vietnam Port Throughput Data (2024)', color: 'text-orange-400' },
+    { time: '00:03', label: 'ANALYZING:', value: 'Wait times > 48hrs...', color: 'text-stone-500' },
+    { time: '00:04', label: 'GENERATING:', value: 'Mitigation Strategy Beta...', color: 'text-green-400' }
 ];
 
 export const WorkbenchFeature: React.FC = () => {
     const [typedText, setTypedText] = useState('');
     const fullText = "I'm worried about port congestion affecting my supply chain in Vietnam...";
+    
+    // Live Terminal State
+    const [terminalLines, setTerminalLines] = useState<typeof SYSTEM_LOGS>([]);
+    const [currentLogIndex, setCurrentLogIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+    const logContainerRef = useRef<HTMLDivElement>(null);
 
+    // Typing Effect for Notepad (Left Side)
     useEffect(() => {
         let index = 0;
         const interval = setInterval(() => {
             setTypedText(fullText.substring(0, index));
             index++;
-            if (index > fullText.length) clearInterval(interval);
-        }, 50);
+            if (index > fullText.length) {
+                clearInterval(interval);
+            }
+        }, 40); // Slightly faster typing for notepad
         return () => clearInterval(interval);
     }, []);
+
+    // Live Terminal Effect (Right Side - Typewriter style)
+    useEffect(() => {
+        if (currentLogIndex >= SYSTEM_LOGS.length) return;
+
+        const targetLog = SYSTEM_LOGS[currentLogIndex];
+        
+        // Typing speed: faster for values to look like data streaming
+        const typingSpeed = 25; 
+        
+        const timeout = setTimeout(() => {
+            // Ensure the line exists in state
+            setTerminalLines(prev => {
+                const newLines = [...prev];
+                if (!newLines[currentLogIndex]) {
+                    // Initialize new line with empty value
+                    newLines[currentLogIndex] = { ...targetLog, value: '' };
+                } else {
+                    // Update existing line
+                    const nextChar = targetLog.value.charAt(charIndex);
+                    newLines[currentLogIndex] = {
+                        ...targetLog,
+                        value: newLines[currentLogIndex].value + nextChar
+                    };
+                }
+                return newLines;
+            });
+
+            // Increment character or move to next line
+            if (charIndex < targetLog.value.length) {
+                setCharIndex(prev => prev + 1);
+            } else {
+                // Line finished, pause briefly then next line
+                setTimeout(() => {
+                    setCurrentLogIndex(prev => prev + 1);
+                    setCharIndex(0);
+                }, 300); // 300ms pause between lines
+            }
+
+            // Auto-scroll
+            if (logContainerRef.current) {
+                logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+            }
+
+        }, typingSpeed);
+
+        return () => clearTimeout(timeout);
+    }, [currentLogIndex, charIndex]);
 
     return (
         <section className="py-24 bg-bw-navy text-white relative overflow-hidden border-t border-stone-800">
@@ -62,45 +132,45 @@ export const WorkbenchFeature: React.FC = () => {
                 </div>
 
                 {/* The Visual Demo (Split Screen) */}
-                <div className="grid lg:grid-cols-2 gap-0 border border-stone-700 rounded-xl overflow-hidden shadow-2xl mb-20 bg-black/40 backdrop-blur-sm">
+                <div className="grid lg:grid-cols-2 gap-0 border border-stone-700 rounded-xl overflow-hidden shadow-2xl mb-24 bg-black/40 backdrop-blur-sm h-[450px]">
                     
                     {/* Left: User Input */}
-                    <div className="p-8 border-b lg:border-b-0 lg:border-r border-stone-700 bg-white/5">
-                        <div className="flex items-center gap-2 mb-4 text-stone-400 text-xs font-bold uppercase tracking-widest">
+                    <div className="p-8 border-b lg:border-b-0 lg:border-r border-stone-700 bg-white/5 flex flex-col">
+                        <div className="flex items-center gap-2 mb-6 text-stone-400 text-xs font-bold uppercase tracking-widest">
                             <MessageSquare className="w-4 h-4" /> Your Strategic Notepad
                         </div>
-                        <div className="h-48 font-serif text-xl text-white/90 leading-relaxed">
+                        <div className="font-serif text-2xl text-white/90 leading-relaxed flex-grow">
                             "{typedText}<span className="animate-pulse text-bw-gold">|</span>"
                         </div>
-                        <div className="text-xs text-stone-500 mt-4">Status: Listening...</div>
+                        <div className="text-xs text-stone-500 mt-4 flex items-center gap-2">
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            Status: Listening...
+                        </div>
                     </div>
 
-                    {/* Right: System Reaction */}
-                    <div className="p-8 bg-black/60 font-mono text-xs relative">
-                        <div className="flex items-center gap-2 mb-6 text-green-500 font-bold uppercase tracking-widest">
+                    {/* Right: System Reaction (Live Terminal) */}
+                    <div className="p-8 bg-black/80 font-mono text-xs relative flex flex-col">
+                        <div className="flex items-center gap-2 mb-6 text-green-500 font-bold uppercase tracking-widest border-b border-white/10 pb-4">
                             <Terminal className="w-4 h-4" /> System Logic Path
                         </div>
-                        <div className="space-y-3">
-                            <div className="flex gap-3 items-center animate-in slide-in-from-left-4 fade-in duration-500 delay-100">
-                                <span className="text-stone-500">[00:01]</span>
-                                <span className="text-blue-400">DETECTED INTENT:</span>
-                                <span className="text-white">Logistics Risk / Supply Chain</span>
-                            </div>
-                            <div className="flex gap-3 items-center animate-in slide-in-from-left-4 fade-in duration-500 delay-300">
-                                <span className="text-stone-500">[00:02]</span>
-                                <span className="text-purple-400">ACTIVATING:</span>
-                                <span className="text-white">Trade Disruption Simulator</span>
-                            </div>
-                            <div className="flex gap-3 items-center animate-in slide-in-from-left-4 fade-in duration-500 delay-500">
-                                <span className="text-stone-500">[00:03]</span>
-                                <span className="text-orange-400">RETRIEVING:</span>
-                                <span className="text-white">Vietnam Port Throughput Data (2024)</span>
-                            </div>
-                            <div className="flex gap-3 items-center animate-in slide-in-from-left-4 fade-in duration-500 delay-700">
-                                <span className="text-stone-500">[00:04]</span>
-                                <span className="text-green-400">GENERATING:</span>
-                                <span className="text-white">Mitigation Strategy Beta...</span>
-                            </div>
+                        
+                        <div ref={logContainerRef} className="space-y-4 overflow-y-auto custom-scrollbar flex-grow pr-2">
+                            {terminalLines.map((log, i) => (
+                                <div key={i} className="flex gap-3 items-start">
+                                    <span className="text-stone-600 shrink-0">[{log.time}]</span>
+                                    <span className={`${log.color} font-bold shrink-0`}>{log.label}</span>
+                                    <span className="text-white/90">
+                                        {log.value}
+                                        {i === currentLogIndex && <span className="animate-pulse inline-block w-2 h-4 bg-green-500/50 ml-1 align-middle"></span>}
+                                    </span>
+                                </div>
+                            ))}
+                            
+                            {currentLogIndex >= SYSTEM_LOGS.length && (
+                                <div className="mt-6 p-3 border border-green-500/30 bg-green-900/10 text-green-400 text-center rounded animate-in fade-in zoom-in duration-300">
+                                    >> STRATEGY READY FOR REVIEW
+                                </div>
+                            )}
                         </div>
                         
                         {/* Floating Badge */}
@@ -110,30 +180,38 @@ export const WorkbenchFeature: React.FC = () => {
                     </div>
                 </div>
 
-                {/* The Use Cases */}
-                <div className="grid md:grid-cols-3 gap-8">
+                {/* The Use Cases - Redesigned (No Icons) */}
+                <div className="grid md:grid-cols-3 gap-6">
                     {USE_CASES.map((useCase, idx) => (
-                        <div key={idx} className="bg-white/5 border border-white/10 p-8 rounded-xl hover:bg-white/10 transition-colors group">
-                            <div className="mb-6 p-3 bg-white/5 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
-                                {useCase.icon}
+                        <div key={idx} className={`relative p-8 rounded-xl border border-white/10 bg-stone-900/50 backdrop-blur-md overflow-hidden group transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${useCase.border}`}>
+                            
+                            {/* Subtle colored gradient overlay on hover */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${useCase.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                            
+                            <div className="relative z-10 flex flex-col h-full">
+                                <h3 className="text-xl font-serif font-bold mb-4 text-white group-hover:text-bw-gold transition-colors">{useCase.title}</h3>
+                                <p className="text-stone-300 text-sm mb-6 italic leading-relaxed flex-grow">"{useCase.quote}"</p>
+                                
+                                <div className="pt-6 border-t border-white/5 mt-auto">
+                                    <p className="text-stone-400 text-xs font-medium leading-relaxed flex gap-3">
+                                        <ArrowRight className="w-4 h-4 shrink-0 text-bw-gold mt-0.5" />
+                                        {useCase.action}
+                                    </p>
+                                </div>
                             </div>
-                            <h3 className="text-xl font-bold mb-4 text-white">{useCase.title}</h3>
-                            <p className="text-stone-300 text-sm mb-4 italic">"{useCase.quote}"</p>
-                            <div className="h-px w-full bg-white/10 mb-4"></div>
-                            <p className="text-stone-400 text-xs font-medium leading-relaxed flex gap-2">
-                                <ArrowRight className="w-4 h-4 shrink-0 text-bw-gold" />
-                                {useCase.action}
-                            </p>
                         </div>
                     ))}
                 </div>
 
                 {/* The "Clarifier" Disclaimer */}
-                <div className="mt-20 p-8 bg-stone-100 rounded-sm text-center border-l-4 border-bw-gold shadow-lg">
-                    <h4 className="text-bw-navy font-serif font-bold text-2xl mb-3">The Great Clarifier.</h4>
-                    <p className="text-stone-600 max-w-3xl mx-auto leading-relaxed">
-                        This system is not designed to compete with human expertise. Whether you are an <strong>expert</strong> performing daily due diligence, or a <strong>novice</strong> unsure of where to start, the Neural Workbench exists to clarify confusion. It organizes the chaos of regional data into a coherent structure, allowing you to build with confidence.
-                    </p>
+                <div className="mt-24 relative p-10 bg-white rounded-sm shadow-xl overflow-hidden">
+                    <div className="absolute top-0 left-0 w-2 h-full bg-bw-navy"></div>
+                    <div className="relative z-10 text-center">
+                        <h4 className="text-bw-navy font-serif font-bold text-3xl mb-4">The Great Clarifier.</h4>
+                        <p className="text-stone-600 max-w-3xl mx-auto leading-relaxed text-lg">
+                            This system is not designed to compete with human expertise. Whether you are an <strong>expert</strong> performing daily due diligence, or a <strong>novice</strong> unsure of where to start, the Neural Workbench exists to clarify confusion. It organizes the chaos of regional data into a coherent structure, allowing you to build with confidence.
+                        </p>
+                    </div>
                 </div>
 
             </div>
