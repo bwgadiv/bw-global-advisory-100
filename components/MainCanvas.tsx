@@ -10,33 +10,21 @@ import {
   Network, Cpu, MessageSquare, Mic, Share2, ListTodo, ToggleLeft, ToggleRight, CheckSquare, Square,
   BrainCircuit, HelpCircle, Mail, Loader2, DollarSign, Wallet, Crosshair, Lock, Fingerprint,
   FileCheck, ScrollText, Compass, Printer, Edit3, ClipboardList, AlertOctagon, Eye, Microscope,
-  Server, Lightbulb, Terminal
+  Server, Lightbulb, Terminal, BookOpen
 } from 'lucide-react';
 import { ReportParameters, ReportData, GenerationPhase, LiveOpportunityItem, ReportSection, NeuroSymbolicState, CopilotInsight } from '../types';
 import { 
     ORGANIZATION_TYPES, 
     REGIONS_AND_COUNTRIES, 
     INDUSTRIES, 
-    RISK_APPETITE_LEVELS, 
-    TIME_HORIZONS,
-    GLOBAL_CITY_DATABASE,
     ORGANIZATION_SCALE_BANDS,
     GLOBAL_DEPARTMENTS,
-    GLOBAL_ROLES,
-    GLOBAL_LEGAL_ENTITIES,
     GLOBAL_STRATEGIC_INTENTS,
     GLOBAL_CAPITAL_SOURCES,
-    GLOBAL_OPERATIONAL_MODELS,
-    DETAILED_PARTNER_CAPABILITIES,
-    DETAILED_RISK_FACTORS,
-    GLOBAL_INCENTIVES,
     SECTOR_THEMES,
-    SECTOR_DEPARTMENTS,
     TARGET_COUNTERPART_TYPES,
-    OUTPUT_FORMATS,
-    LETTER_STYLES,
-    REPORT_DEPTHS,
-    AVAILABLE_AGENTS
+    STRATEGIC_LENSES,
+    INDUSTRY_NICHES
 } from '../constants';
 
 // Module Imports
@@ -50,7 +38,6 @@ import { AddOpportunityModal } from './AddOpportunityModal';
 import { ComparativeAnalysis } from './ComparativeAnalysis';
 import ScenarioSimulator from './ScenarioSimulator'; 
 import CompetitorMap from './CompetitorMap'; 
-import { ChecklistGatekeeper } from './ChecklistGatekeeper'; 
 import { INITIAL_CHECKLIST, INITIAL_FORMULAS, NeuroSymbolicEngine } from '../services/ruleEngine'; 
 import MultiAgentOrchestrator from '../services/MultiAgentOrchestrator';
 
@@ -71,34 +58,6 @@ interface MainCanvasProps {
   onNewAnalysis: () => void;
   onCopilotMessage?: (msg: CopilotInsight) => void;
 }
-
-// Map internal module IDs to display info
-const ENGINE_CATALOG = [
-    { id: 'Nexus Rocket Engine', label: 'Nexus Rocket Engine', desc: 'Latent Asset Identification (LAI) & IVAS Scoring.', why: 'Crucial for measuring pure economic velocity.', icon: RocketIcon, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
-    { id: 'Symbiotic Matchmaking', label: 'Symbiotic Matchmaker', desc: 'Identify high-asymmetry partners globally.', why: 'Finds partners who need you as much as you need them.', icon: MatchMakerIcon, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-    { id: 'Historical Precedents', label: 'Historical Precedents', desc: 'Match strategy against 100 years of case studies.', why: 'Prevents repeating history\'s expensive mistakes.', icon: History, color: 'text-stone-600', bg: 'bg-stone-100', border: 'border-stone-200' },
-    { id: 'Temporal Phase Analysis', label: 'Temporal Phase Analysis', desc: 'Lifecycle stage detection & progression modeling.', why: 'Times your entry to the exact growth phase of the region.', icon: Clock, color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200' },
-    { id: 'Geopolitical Analysis', label: 'Geopolitical Forecast', desc: 'Regional stability, currency risk & trade barriers.', why: 'Maps invisible macro-threats before they materialize.', icon: GlobeIcon, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
-    { id: 'Governance Audit', label: 'Governance Audit', desc: 'Corruption index, regulatory friction & compliance.', why: 'Quantifies the cost of bureaucracy and red tape.', icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-    { id: 'Deep Reasoning', label: 'Deep Reasoning', desc: 'Adversarial logic check: "Deal Killers" vs "Hidden Gems".', why: 'Acts as a "Devil\'s Advocate" to stress-test your logic.', icon: Layout, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200' },
-    { id: 'Financial Modeling', label: 'Financial Modeling', desc: 'Strategic Cash Flow (SCF) & Predictive Growth.', why: 'Projects 5-year capital efficiency scenarios.', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-    { id: 'Trade Simulator', label: 'Trade Simulator', desc: 'Supply chain shock modeling & tariff impact.', why: 'Simulates logistics breakdowns to ensure resilience.', icon: ActivityIcon, color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
-    { id: 'Sentiment Engine', label: 'Sentiment Engine', desc: 'Public perception & brand risk analysis.', why: 'Gauges social license to operate in the region.', icon: MessageSquare, color: 'text-pink-600', bg: 'bg-pink-50', border: 'border-pink-200' },
-];
-
-// Enhanced Risk Categories
-const BASE_RISK_CATEGORIES = [
-    { id: 'regulatory', label: 'Regulatory Friction', icon: Scale },
-    { id: 'currency', label: 'Currency Volatility', icon: TrendingUp },
-    { id: 'supply', label: 'Supply Chain Fragility', icon: ActivityIcon },
-    { id: 'labor', label: 'Labor/Talent Shortage', icon: Users },
-    { id: 'ip', label: 'IP / Data Sovereignty', icon: Lock },
-    { id: 'political', label: 'Political Instability', icon: AlertOctagon },
-    { id: 'cyber', label: 'Cybersecurity Threat', icon: Server },
-    { id: 'climate', label: 'Environmental / Climate', icon: Globe },
-    { id: 'reputation', label: 'Social License / Reputation', icon: MessageSquare },
-    { id: 'infra', label: 'Infrastructure Reliability', icon: Building2 },
-];
 
 const SelectOrInput = ({ label, value, options, onChange, placeholder = "Enter custom value...", fallbackList = [] }: any) => {
     const effectiveOptions = options.length > 0 ? options : fallbackList.map((s: string) => ({ value: s, label: s }));
@@ -180,7 +139,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     const [isComparativeModalOpen, setIsComparativeModalOpen] = useState(false);
     const [resultTab, setResultTab] = useState<'dossier' | 'simulation' | 'market'>('dossier');
     
-    // Risk State
+    // Collaborative State
     const [activeRisk, setActiveRisk] = useState<string | null>(null);
     const [riskAnalysisText, setRiskAnalysisText] = useState<string>('');
     const [isAnalyzingRisk, setIsAnalyzingRisk] = useState(false);
@@ -192,12 +151,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
     // "Confidential Briefing" State
     const [briefingSigned, setBriefingSigned] = useState(false);
-    // Config State for Step 5
-    const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>(['dossier']);
-    const [strategicPosture, setStrategicPosture] = useState<string>('diplomatic');
-    const [step5Context, setStep5Context] = useState<string>(''); // User commentary
-    
-    // System Thinking State (for visual effects)
     const [systemThinkingLog, setSystemThinkingLog] = useState<string[]>([]);
 
     const [neuroState, setNeuroState] = useState<NeuroSymbolicState>({
@@ -227,48 +180,35 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         }
     }, [generationPhase]);
 
+    // REACTIVE LISTENER: WATCH NOTES FOR MODULE ACTIVATION (Step 4 Logic)
+    useEffect(() => {
+        if (params.collaborativeNotes && params.collaborativeNotes.length > 5) {
+            const note = params.collaborativeNotes.toLowerCase();
+            let newModule = '';
+            
+            if (note.includes("risk") || note.includes("safe") || note.includes("protect")) {
+                if (!params.selectedModules.includes('Risk Shield')) newModule = 'Risk Shield';
+            }
+            if (note.includes("money") || note.includes("finance") || note.includes("capital")) {
+                if (!params.selectedModules.includes('Financial Modeling')) newModule = 'Financial Modeling';
+            }
+            if (note.includes("partner") || note.includes("jv") || note.includes("match")) {
+                if (!params.selectedModules.includes('Symbiotic Matchmaking')) newModule = 'Symbiotic Matchmaking';
+            }
+            if (note.includes("supply") || note.includes("chain") || note.includes("logistics")) {
+                if (!params.selectedModules.includes('Trade Simulator')) newModule = 'Trade Simulator';
+            }
+
+            if (newModule) {
+                setParams(prev => ({ ...prev, selectedModules: [...prev.selectedModules, newModule] }));
+                addToLog(`>> SYSTEM REACTION: Activating '${newModule}' based on note content.`);
+            }
+        }
+    }, [params.collaborativeNotes]);
+
     const addToLog = (msg: string) => {
         setSystemThinkingLog(prev => [...prev.slice(-4), msg]); // Keep last 5
     };
-
-    // Engine Toggle Logic with Log Feedback
-    const toggleEngine = (engineLabel: string) => {
-        const current = (params.selectedModules as string[]) || [];
-        const isActive = current.includes(engineLabel);
-        const updated = isActive 
-            ? current.filter(item => item !== engineLabel)
-            : [...current, engineLabel];
-        
-        handleParamChange('selectedModules', updated);
-        
-        if (!isActive) {
-            addToLog(`[ARCH] ${engineLabel} ACTIVATED. Linking to ${params.country || 'Target'} context...`);
-        } else {
-            addToLog(`[ARCH] ${engineLabel} DEACTIVATED.`);
-        }
-    };
-
-    // Enhanced Copilot Messaging for "Live Consultant" feel
-    useEffect(() => {
-        if (!onCopilotMessage) return;
-        
-        let msg: CopilotInsight | null = null;
-        
-        if (step === 1) {
-             msg = { type: 'insight', title: 'Consultant Active', description: 'I am calibrating the model to your organization\'s scale. Please ensure the Entity Type matches your legal structure for accurate tax/compliance forecasting.', confidence: 100 };
-        } else if (step === 2) {
-             msg = { type: 'strategy', title: 'Strategic Drift Check', description: 'Scanning your Problem Statement for ambiguity. A vague mandate like "Growth" yields generic results. Be specific about "Market Share" vs "Revenue".', confidence: 100 };
-        } else if (step === 3) {
-             msg = { type: 'warning', title: 'Logic Gatekeeper', description: 'I am monitoring for strict compliance rules. If you have "Go/No-Go" financial covenants (e.g. Debt/EBITDA < 3x), tell me so I can lock the logic engine.', confidence: 100 };
-        } else if (step === 4) {
-             msg = { type: 'insight', title: 'Neural Architecture', description: 'Selecting specific engines triggers live data agents. Activating the "Rocket Engine" will enable Latent Asset Identification. Watch the System Logic Path on the right.', confidence: 100 };
-        } else if (step === 5) {
-             msg = { type: 'question', title: 'Final Flight Check', description: 'This Dashboard is your "Pre-Summary Report". Verify all vectors before I compile the final PDF artifacts. Your "Readiness Score" dictates the depth of the generated output.', confidence: 100 };
-        }
-
-        if (msg) onCopilotMessage({ ...msg, id: Date.now().toString() });
-        
-    }, [step, params.country]);
 
     const handleParamChange = (key: keyof ReportParameters, value: any) => {
         setParams({ ...params, [key]: value });
@@ -282,53 +222,13 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         setParams({ ...params, [key]: updated });
     };
 
-    const toggleDeliverable = (id: string) => {
-        setSelectedDeliverables(prev => 
-            prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-        );
-    };
-
     const addCustomRisk = () => {
         if (!customRiskInput.trim()) return;
         const newId = `custom_${Date.now()}`;
         setCustomRisks([...customRisks, { id: newId, label: customRiskInput }]);
-        // Automatically select it
         const current = params.partnershipSupportNeeds || [];
         handleParamChange('partnershipSupportNeeds', [...current, customRiskInput]);
         setCustomRiskInput('');
-    };
-
-    // Risk Analysis Simulation
-    const handleRiskClick = async (riskId: string, riskLabel: string) => {
-        setActiveRisk(riskId);
-        setIsAnalyzingRisk(true);
-        // toggle in params if needed, or just view
-        if (!params.partnershipSupportNeeds?.includes(riskLabel)) {
-            toggleArrayParam('partnershipSupportNeeds', riskLabel);
-        }
-        
-        // Mocking the "Deep Dive" content based on the location
-        const mockDelay = 800;
-        const location = params.country || "Target Region";
-        
-        setTimeout(() => {
-            let analysis = "";
-            switch (riskId) {
-                case 'regulatory': 
-                    analysis = `INVESTOR CONCERN: ${location} is notorious for opaque licensing procedures. Foreign entities often face 6-12 month delays without a local joint venture. \n\nNEXUS MITIGATION: Deploy the 'Regulatory Navigation Index' to map specific agency bottlenecks. Use a local 'Special Purpose Vehicle' (SPV) to bypass Level-1 scrutiny.`;
-                    break;
-                case 'currency':
-                    analysis = `INVESTOR CONCERN: Volatility in the local currency vs. USD creates a 15-20% margin risk for repatriation of profits. \n\nNEXUS MITIGATION: Structuring contracts in a hard-currency basket or utilizing a 'Synthetic Hedge' via operational expenses can neutralize this exposure.`;
-                    break;
-                case 'supply':
-                    analysis = `INVESTOR CONCERN: Last-mile logistics in ${location} suffer from infrastructure fragmentation, leading to a 30% higher cost-per-unit than regional peers. \n\nNEXUS MITIGATION: We recommend a 'Hub-and-Spoke' distribution model leveraging Tier-2 logistics partners identified by the Matchmaking Engine.`;
-                    break;
-                default:
-                    analysis = `INVESTOR CONCERN: General uncertainty regarding ${riskLabel} in ${location} increases the cost of capital by an estimated 250 basis points. \n\nNEXUS MITIGATION: Systematic monitoring and local insurance wrappers can reduce the perceived risk premium.`;
-            }
-            setRiskAnalysisText(analysis);
-            setIsAnalyzingRisk(false);
-        }, mockDelay);
     };
 
     const handleGenerateReportWithOrchestrator = async () => {
@@ -350,7 +250,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         }
     };
 
-    // Calculate dynamic readiness score based on filled fields (Centralized logic)
     const calculateReadiness = () => {
         if (!params.organizationName || !params.country) return 0;
         let score = 10; 
@@ -361,7 +260,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         if (params.revenueBand) score += 5;
         if (params.riskTolerance) score += 5;
         if (params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0) score += 10;
-        if (params.selectedModules && params.selectedModules.length > 0) score += 25; // High weight for Step 4
+        if (params.selectedModules && params.selectedModules.length > 0) score += 25; 
         
         return Math.min(100, score);
     };
@@ -371,7 +270,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     const renderStep1_Profile = () => {
         const currentSector = params.industry[0] || 'Default';
         const sectorTheme = SECTOR_THEMES[currentSector] || SECTOR_THEMES['Default'];
-        const departmentOptionsRaw = SECTOR_DEPARTMENTS[currentSector] || GLOBAL_DEPARTMENTS;
+        const departmentOptionsRaw = GLOBAL_DEPARTMENTS;
         const departmentOptions = departmentOptionsRaw.map(d => ({ value: d, label: d }));
 
         return (
@@ -388,14 +287,13 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
                 <div className="grid grid-cols-1 gap-8">
                     <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-                        {/* UPDATE: Orange header + Description */}
                         <div className="mb-6 border-b border-orange-200 pb-2">
                             <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1">Corporate Identity</h4>
                             <p className="text-xs text-stone-500">Establish the legal and industrial baseline of the subject entity.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
-                                <SelectOrInput label="Legal Entity Structure" value={params.organizationType} options={GLOBAL_LEGAL_ENTITIES.map(t => ({ value: t, label: t }))} onChange={(val: string) => handleParamChange('organizationType', val)} placeholder="e.g. Special Purpose Vehicle (SPV)" fallbackList={ORGANIZATION_TYPES} />
+                                <SelectOrInput label="Legal Entity Structure" value={params.organizationType} options={ORGANIZATION_TYPES.map(t => ({ value: t, label: t }))} onChange={(val: string) => handleParamChange('organizationType', val)} placeholder="e.g. Special Purpose Vehicle (SPV)" fallbackList={ORGANIZATION_TYPES} />
                                 <SelectOrInput label="Primary Industry Sector" value={params.industry[0] || ''} options={INDUSTRIES.map(i => ({ value: i.title, label: i.title }))} onChange={(val: string) => handleParamChange('industry', [val])} placeholder="e.g. Renewable Energy" fallbackList={INDUSTRIES.map(i => i.title)} />
                             </div>
                             <div className="space-y-4">
@@ -406,7 +304,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                     </div>
 
                     <div className={`p-6 rounded-xl border shadow-sm transition-colors duration-500 ${sectorTheme.bg} ${sectorTheme.border}`}>
-                        {/* UPDATE: Orange header for Operational Context + Description */}
                         <div className="mb-6 border-b border-orange-200 pb-2 flex justify-between items-start">
                             <div>
                                 <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1">Operational Context & User Role</h4>
@@ -440,47 +337,38 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                     <div><h3 className="text-xl font-serif font-bold text-stone-900">Strategic Mandate</h3><p className="text-sm text-stone-500">Define mission vectors, narrative context, and success metrics.</p></div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-6">
-                        {/* UPDATE: Orange header + Description */}
-                        <div className="border-b border-orange-200 pb-2">
-                            <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1">Mission Architecture</h4>
-                            <p className="text-xs text-stone-500">Define the core purpose and geographical focus of the operation.</p>
-                        </div>
-                        <div className="space-y-4">
-                            <div>
-                                <MultiSelectWithSearch label="Core Strategic Intent" options={GLOBAL_STRATEGIC_INTENTS} selectedValues={Array.isArray(params.strategicIntent) ? params.strategicIntent : [params.strategicIntent].filter(Boolean)} onChange={(values: string[]) => handleParamChange('strategicIntent', values)} placeholder="Select Mission Vectors..." />
-                                <p className="text-[10px] text-blue-600 mt-1 flex items-center gap-1 font-medium"><Info size={10} /> Select multiple objectives to create a composite mission profile.</p>
+                <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-6">
+                    <div className="border-b border-orange-200 pb-2">
+                        <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1">Multi-Vector Scoping</h4>
+                        <p className="text-xs text-stone-500">Target multiple jurisdictions or sectors simultaneously for complex analysis.</p>
+                    </div>
+                    
+                    <div className="space-y-6">
+                        {/* Primary Vector */}
+                        <div className="p-4 bg-stone-50 rounded-lg border border-stone-200">
+                            <h5 className="text-xs font-bold text-stone-700 mb-3 flex items-center gap-2">
+                                <span className="bg-stone-800 text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px]">1</span>
+                                Primary Strategic Vector
+                            </h5>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div><label className="text-xs font-bold text-stone-500 block mb-1 uppercase">Target Region</label><select className="w-full p-2 bg-white border border-stone-200 rounded text-sm" value={params.region} onChange={(e) => handleParamChange('region', e.target.value)}><option value="">Select Region...</option>{REGIONS_AND_COUNTRIES.map(r => <option key={r.name} value={r.name}>{r.name}</option>)}</select></div>
+                                <div><label className="text-xs font-bold text-stone-500 block mb-1 uppercase">Specific Country</label><select className="w-full p-2 bg-white border border-stone-200 rounded text-sm" value={params.country} onChange={(e) => handleParamChange('country', e.target.value)}><option value="">Select Country...</option>{REGIONS_AND_COUNTRIES.find(r => r.name === params.region)?.countries.map(c => (<option key={c} value={c}>{c}</option>)) || <option disabled>Select Region First</option>}</select></div>
                             </div>
-                            <div><label className="text-xs font-bold text-stone-700 block mb-1 uppercase tracking-wide">Target Region</label><select className="w-full p-3 bg-stone-50 border border-stone-200 rounded-lg text-sm outline-none cursor-pointer focus:ring-2 focus:ring-stone-800" value={params.region} onChange={(e) => handleParamChange('region', e.target.value)}><option value="">Select Region...</option>{REGIONS_AND_COUNTRIES.map(r => <option key={r.name} value={r.name}>{r.name}</option>)}</select></div>
-                            <div><label className="text-xs font-bold text-stone-700 block mb-1 uppercase tracking-wide">Specific Country</label><select className="w-full p-3 bg-stone-50 border border-stone-200 rounded-lg text-sm outline-none cursor-pointer focus:ring-2 focus:ring-stone-800" value={params.country} onChange={(e) => handleParamChange('country', e.target.value)}><option value="">Select Country...</option>{REGIONS_AND_COUNTRIES.find(r => r.name === params.region)?.countries.map(c => (<option key={c} value={c}>{c}</option>)) || <option disabled>Select Region First</option>}</select></div>
+                        </div>
+
+                        {/* Secondary Vectors (Visual Placeholder for now) */}
+                        <div className="p-4 bg-white border border-dashed border-stone-300 rounded-lg flex items-center justify-center gap-2 cursor-pointer hover:bg-stone-50 transition-colors">
+                            <Plus className="w-4 h-4 text-stone-400" />
+                            <span className="text-sm font-bold text-stone-500">Add Secondary Vector (e.g. Logistics Hub)</span>
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-6">
-                        {/* UPDATE: Orange header + Description */}
-                        <div className="border-b border-orange-200 pb-2">
-                            <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                <Crosshair className="w-4 h-4" /> Targeting Mechanics
-                            </h4>
-                            <p className="text-xs text-stone-500">Identify the ideal partner or entity type for engagement.</p>
-                        </div>
-                        <div>
-                            <span className="text-xs font-bold text-stone-700 uppercase tracking-wide block mb-2">Target Counterpart DNA</span>
-                            <MultiSelectWithSearch 
-                                label="" 
-                                options={TARGET_COUNTERPART_TYPES} 
-                                selectedValues={Array.isArray(params.targetCounterpartType) ? params.targetCounterpartType : [params.targetCounterpartType].filter(Boolean)} 
-                                onChange={(values: string[]) => handleParamChange('targetCounterpartType', values)} 
-                                placeholder="E.g., Private Equity, State-Owned Enterprise..." 
-                            />
-                            <p className="text-[10px] text-blue-600 mt-1 flex items-center gap-1 font-medium"><Info size={10} /> Select multiple entity types to broaden the search scope.</p>
-                        </div>
+                    <div className="pt-4 border-t border-stone-100">
+                        <MultiSelectWithSearch label="Core Strategic Intent" options={GLOBAL_STRATEGIC_INTENTS} selectedValues={Array.isArray(params.strategicIntent) ? params.strategicIntent : [params.strategicIntent].filter(Boolean)} onChange={(values: string[]) => handleParamChange('strategicIntent', values)} placeholder="Select Mission Vectors..." />
                     </div>
                 </div>
 
                 <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-6">
-                    {/* UPDATE: Orange header + Description */}
                     <div className="border-b border-orange-200 pb-2">
                         <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1">Strategic Context & Guardrails</h4>
                         <p className="text-xs text-stone-500">Provide the narrative logic and specific constraints for the AI.</p>
@@ -497,8 +385,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
     };
 
     const renderStep3_Calibration = () => {
-        // Merge base categories with custom ones
-        const allRisks = [...BASE_RISK_CATEGORIES, ...customRisks.map(r => ({ id: r.id, label: r.label, icon: AlertOctagon }))];
+        const allRisks = [...TARGET_COUNTERPART_TYPES, ...customRisks.map(r => r.label)]; 
 
         return (
         <div className="space-y-8 animate-in fade-in slide-in-from-left-4 mb-20">
@@ -516,7 +403,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                 
                 {/* COLUMN 1: FINANCIAL & LOGIC */}
                 <div className="space-y-8">
-                    {/* Neuro-Symbolic Logic Card (Simplified Access) */}
+                    {/* Neuro-Symbolic Logic Card */}
                     <div className="bg-purple-900 text-white p-6 rounded-xl shadow-lg border border-purple-800 relative overflow-hidden">
                         <div className="relative z-10">
                             <div className="flex items-center gap-2 mb-2 text-purple-300 font-bold text-xs uppercase tracking-widest">
@@ -540,7 +427,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
                     {/* Capital Structure */}
                     <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-5">
-                        {/* UPDATE: Orange header + Description */}
                         <div className="border-b border-orange-200 pb-2">
                             <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
                                 <DollarSign className="w-4 h-4" /> Capital Structure & Funding
@@ -567,12 +453,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                                     <SelectOrInput label="" value={params.fundingSource || ''} options={GLOBAL_CAPITAL_SOURCES.map(s => ({value: s, label: s}))} onChange={(val: string) => handleParamChange('fundingSource', val)} placeholder="E.g. Debt Financing" fallbackList={GLOBAL_CAPITAL_SOURCES} />
                                 </div>
                             </div>
-                            
-                            {/* Ask Copilot Helper */}
-                            <div className="p-3 bg-stone-50 rounded border border-stone-200 flex items-center gap-3 cursor-pointer hover:bg-stone-100 transition-colors">
-                                <div className="bg-stone-200 p-1.5 rounded-full"><HelpCircle className="w-4 h-4 text-stone-600" /></div>
-                                <div className="text-xs text-stone-500">Unsure about the optimal capital mix for {params.country || 'this region'}? <span className="underline font-bold text-stone-700">Ask Copilot.</span></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -589,31 +469,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
 
                         {/* Risk Monitors Grid */}
                         <div className="flex-1">
-                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Active Risk Monitors (Select to Activate)</label>
-                            <div className="grid grid-cols-2 gap-3 mb-6">
-                                {allRisks.map((risk) => {
-                                    const isActive = (params.partnershipSupportNeeds || []).includes(risk.label);
-                                    return (
-                                        <button
-                                            key={risk.id}
-                                            onClick={() => handleRiskClick(risk.id, risk.label)}
-                                            className={`p-3 rounded-lg border text-left transition-all relative overflow-hidden group flex items-center gap-2 ${
-                                                isActive 
-                                                ? 'bg-orange-50 border-orange-300 ring-1 ring-orange-200 shadow-sm' 
-                                                : 'bg-white border-stone-200 hover:border-orange-200 hover:shadow-sm'
-                                            }`}
-                                        >
-                                            <div className={`p-1.5 rounded ${isActive ? 'bg-orange-200 text-orange-800' : 'bg-stone-100 text-stone-400'}`}>
-                                                <risk.icon className="w-3.5 h-3.5" />
-                                            </div>
-                                            <div className={`text-xs font-bold ${isActive ? 'text-stone-900' : 'text-stone-600'}`}>{risk.label}</div>
-                                            {isActive && <Eye className="w-3 h-3 text-orange-400 animate-pulse ml-auto" />}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Manual Entry */}
+                            <label className="text-xs font-bold text-stone-700 block mb-3 uppercase tracking-wide">Add Custom Risk Vectors</label>
                             <div className="mb-4 flex items-center gap-2">
                                 <input 
                                     type="text" 
@@ -630,29 +486,14 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                                     <Plus className="w-3 h-3" />
                                 </button>
                             </div>
-
-                            {/* Deep Dive Inspector Panel */}
-                            {activeRisk && (
-                                <div className="bg-stone-900 text-stone-300 p-5 rounded-xl border border-stone-700 animate-in slide-in-from-top-2">
-                                    <div className="flex items-center justify-between mb-3 border-b border-stone-700 pb-2">
-                                        <h5 className="text-xs font-bold text-white uppercase flex items-center gap-2">
-                                            <Microscope className="w-3 h-3 text-orange-500" /> Deep Dive: {allRisks.find(r => r.id === activeRisk)?.label}
-                                        </h5>
-                                        <span className="text-[9px] font-mono text-stone-500">{params.country || 'Global'} Context</span>
-                                    </div>
-                                    
-                                    {isAnalyzingRisk ? (
-                                        <div className="py-4 text-center">
-                                            <Loader2 className="w-6 h-6 text-orange-500 animate-spin mx-auto mb-2" />
-                                            <p className="text-xs text-stone-500">Retrieving local intelligence...</p>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-4 text-xs leading-relaxed">
-                                            <div className="whitespace-pre-wrap">{riskAnalysisText}</div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                            
+                            <div className="flex flex-wrap gap-2">
+                                {params.partnershipSupportNeeds?.map((risk, i) => (
+                                    <span key={i} className="px-3 py-1 bg-red-50 text-red-700 border border-red-100 rounded-full text-xs font-bold flex items-center gap-2">
+                                        {risk} <button onClick={() => toggleArrayParam('partnershipSupportNeeds', risk)} className="hover:text-red-900">×</button>
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -660,136 +501,98 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         </div>
     )};
 
+    // STEP 4: THE COLLABORATIVE WORKBENCH
     const renderStep4_Architecture = () => {
         return (
             <div className="space-y-8 animate-in fade-in slide-in-from-left-4 mb-20">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 bg-white border border-stone-200 rounded-xl shadow-sm"><Cpu className="w-6 h-6 text-purple-600" /></div>
-                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Intelligence Architecture</h3><p className="text-sm text-stone-500">Configure the active engine matrix and agent swarm for this mission.</p></div>
+                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Neural Workbench</h3><p className="text-sm text-stone-500">Collaborative Interface: Configure modules via discussion or manual selection.</p></div>
                 </div>
 
-                {/* Introductory Explanation */}
-                <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm mb-6">
-                    <h4 className="text-sm font-bold text-stone-900 mb-2">Designing the Analytical Brain</h4>
-                    <p className="text-xs text-stone-600 leading-relaxed max-w-3xl">
-                        You are configuring the "Neural Pathways" of the analysis. Each selected module activates a specific AI agent specialized in that domain (e.g., Financial Modeling, Geopolitics). 
-                        Activating more modules provides deeper cross-validation but increases computation time.
-                    </p>
-                </div>
-
-                {/* Auto-Provisioning Visual */}
-                <div className="bg-stone-50 p-8 rounded-xl shadow-sm border border-stone-200">
-                    <div className="flex justify-between items-center mb-8 border-b border-orange-200 pb-4">
-                        <div>
-                            <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                <Layers className="w-4 h-4" /> Neural Pathways Configuration
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[500px]">
+                    
+                    {/* LEFT: THE SYSTEM BRAIN (Active Modules) */}
+                    <div className="bg-stone-900 text-white p-6 rounded-xl shadow-lg border border-stone-800 relative overflow-hidden flex flex-col">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Cpu size={120} /></div>
+                        
+                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-stone-700">
+                            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                                <BrainCircuit className="w-4 h-4 text-purple-400" /> Active Neural Modules
                             </h4>
-                            <p className="text-xs text-stone-500">Select active modules for your analysis.</p>
-                        </div>
-                        <span className="text-xs font-mono text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 flex items-center gap-1">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            {params.selectedModules?.length || 0} PATHWAYS ACTIVE
-                        </span>
-                    </div>
-
-                    <div className="space-y-6">
-                        {/* Core Analysis Group */}
-                        <div>
-                            <h5 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3 pl-1">Core Analysis Engines</h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {ENGINE_CATALOG.slice(0, 4).map((eng) => {
-                                    const isActive = (params.selectedModules || []).includes(eng.label);
-                                    return (
-                                        <div 
-                                            key={eng.id} 
-                                            onClick={() => toggleEngine(eng.label)}
-                                            className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${
-                                                isActive 
-                                                ? 'bg-white border-blue-500 shadow-md ring-1 ring-blue-500' 
-                                                : 'bg-white border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100'
-                                            }`}
-                                        >
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div className={`p-2 rounded-lg ${isActive ? eng.bg : 'bg-stone-100'}`}>
-                                                    <eng.icon className={`w-5 h-5 ${isActive ? eng.color : 'text-stone-400'}`} />
-                                                </div>
-                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isActive ? 'bg-blue-500 border-blue-500' : 'border-stone-300'}`}>
-                                                    {isActive && <CheckCircle2 className="w-3 h-3 text-white" />}
-                                                </div>
-                                            </div>
-                                            <h5 className={`font-bold text-sm ${isActive ? 'text-stone-900' : 'text-stone-500'}`}>{eng.label}</h5>
-                                            <p className="text-[10px] text-stone-500 mt-1 leading-tight">{eng.desc}</p>
-                                            
-                                            {/* Enhanced "Why" tooltip/block */}
-                                            {isActive && (
-                                                <div className="mt-2 pt-2 border-t border-stone-100 text-[9px] text-blue-600 font-medium bg-blue-50/50 p-1 rounded">
-                                                    Why: {eng.why}
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                            <span className="text-xs font-mono text-stone-400">{params.selectedModules.length} Active</span>
                         </div>
 
-                        {/* Specialized/Deep Dive Group */}
-                        <div>
-                            <h5 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3 pl-1">Deep Dive Simulations</h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {ENGINE_CATALOG.slice(4).map((eng) => {
-                                    const isActive = (params.selectedModules || []).includes(eng.label);
-                                    return (
-                                        <div 
-                                            key={eng.id} 
-                                            onClick={() => toggleEngine(eng.label)}
-                                            className={`relative p-4 rounded-xl border transition-all cursor-pointer group ${
-                                                isActive 
-                                                ? 'bg-white border-purple-500 shadow-md ring-1 ring-purple-500' 
-                                                : 'bg-white border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100'
-                                            }`}
-                                        >
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div className={`p-2 rounded-lg ${isActive ? eng.bg : 'bg-stone-100'}`}>
-                                                    <eng.icon className={`w-5 h-5 ${isActive ? eng.color : 'text-stone-400'}`} />
-                                                </div>
-                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isActive ? 'bg-purple-500 border-purple-500' : 'border-stone-300'}`}>
-                                                    {isActive && <CheckCircle2 className="w-3 h-3 text-white" />}
-                                                </div>
-                                            </div>
-                                            <h5 className={`font-bold text-sm ${isActive ? 'text-stone-900' : 'text-stone-500'}`}>{eng.label}</h5>
-                                            <p className="text-[10px] text-stone-500 mt-1 leading-tight">{eng.desc}</p>
-                                            
-                                            {/* Enhanced "Why" tooltip/block */}
-                                            {isActive && (
-                                                <div className="mt-2 pt-2 border-t border-stone-100 text-[9px] text-purple-600 font-medium bg-purple-50/50 p-1 rounded">
-                                                    Why: {eng.why}
-                                                </div>
-                                            )}
+                        <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                            {params.selectedModules.length === 0 ? (
+                                <div className="text-center py-12 text-stone-600 text-sm italic">
+                                    System Standby. Add notes to auto-provision modules.
+                                </div>
+                            ) : (
+                                params.selectedModules.map((mod, i) => (
+                                    <div key={i} className="flex items-center justify-between bg-white/5 border border-white/10 p-3 rounded-lg animate-in slide-in-from-left-2">
+                                        <span className="text-sm font-bold text-stone-200">{mod}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                            <span className="text-[10px] font-mono text-green-400">RUNNING</span>
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* System Log */}
+                        <div className="mt-4 pt-4 border-t border-stone-800">
+                            <div className="text-[10px] font-mono text-stone-500 mb-2 uppercase tracking-widest">System Logic Stream</div>
+                            <div className="h-24 overflow-y-auto custom-scrollbar text-xs font-mono text-green-400 space-y-1">
+                                {systemThinkingLog.map((log, i) => (
+                                    <div key={i} className="opacity-80">
+                                        <span className="text-stone-600 mr-2">[{new Date().toLocaleTimeString()}]</span>
+                                        {log}
+                                    </div>
+                                ))}
+                                <div className="animate-pulse">_</div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Simulate Logic Button */}
-                    <div className="mt-8 pt-6 border-t border-stone-200 flex justify-end">
-                        <button 
-                            onClick={() => {
-                                addToLog("[SIM] Running Agent Handshake Protocol...");
-                                setTimeout(() => addToLog("[SIM] Scout Agent connected to Financial Agent."), 800);
-                                setTimeout(() => addToLog("[SIM] Latency check: 12ms. All systems green."), 1600);
-                            }}
-                            className="text-xs font-bold text-stone-500 hover:text-stone-900 flex items-center gap-2"
-                        >
-                            <Play className="w-3 h-3" /> Simulate Logic Flow
-                        </button>
+                    {/* RIGHT: THE COLLABORATIVE SCRATCHPAD */}
+                    <div className="bg-white rounded-xl shadow-sm border border-stone-200 flex flex-col overflow-hidden">
+                        <div className="p-4 border-b border-stone-100 bg-stone-50 flex justify-between items-center">
+                            <h4 className="text-sm font-bold text-stone-800 flex items-center gap-2">
+                                <Edit3 className="w-4 h-4 text-blue-600" /> Collaborative Scratchpad
+                            </h4>
+                            <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-100">
+                                AI Listening
+                            </span>
+                        </div>
+                        
+                        <div className="flex-1 relative">
+                            <textarea 
+                                className="w-full h-full p-6 resize-none outline-none text-sm text-stone-700 leading-relaxed placeholder:text-stone-300 font-medium"
+                                placeholder="Type your unstructured thoughts here (e.g., 'I am worried about currency risk in Vietnam'). The system will automatically interpret your concerns and activate the relevant analysis modules on the left..."
+                                value={params.collaborativeNotes}
+                                onChange={(e) => handleParamChange('collaborativeNotes', e.target.value)}
+                            />
+                            
+                            {/* Real-time signals injection */}
+                            <div className="absolute bottom-4 right-4 flex flex-col gap-2 items-end pointer-events-none">
+                                {params.country && (
+                                    <div className="bg-stone-900/90 text-white text-[10px] px-3 py-1.5 rounded-lg shadow-lg backdrop-blur-sm animate-in fade-in slide-in-from-bottom-2">
+                                        <Globe className="w-3 h-3 inline mr-1 text-blue-400" />
+                                        Live Feed: {params.country} Inflation stable at 3.2%
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         );
     };
 
+    // STEP 5: OUTPUT ARCHITECT (New Location for Config)
     const renderStep5_Output = () => {
         const readiness = calculateReadiness();
         
@@ -797,67 +600,66 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
             <div className="space-y-8 animate-in fade-in slide-in-from-left-4 mb-20">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 bg-white border border-stone-200 rounded-xl shadow-sm"><Lock className="w-6 h-6 text-stone-700" /></div>
-                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Mission Profile Validation</h3><p className="text-sm text-stone-500">Review all inputs, verify mission readiness, and authorize final generation.</p></div>
+                    <div><h3 className="text-xl font-serif font-bold text-stone-900">Output Architect & Validation</h3><p className="text-sm text-stone-500">Configure final deliverables and authorize generation.</p></div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
-                    {/* LEFT COLUMN: The Consolidated Profile (Pre-Summary Report) */}
+                    {/* LEFT: CONFIGURATION */}
                     <div className="space-y-6">
-                        {/* 1. Core Mandate Summary */}
                         <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Core Mandate Summary</h4>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="text-[10px] text-stone-500 uppercase font-bold">Organization Target</p>
-                                        <p className="text-sm font-bold text-stone-900">{params.organizationName || 'Pending'}</p>
-                                        <p className="text-xs text-stone-500">{params.organizationType}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] text-stone-500 uppercase font-bold">Jurisdiction</p>
-                                        <p className="text-sm font-bold text-stone-900">{params.country || 'Pending'}</p>
-                                        <p className="text-xs text-stone-500">{params.region}</p>
+                            <div className="border-b border-orange-200 pb-2 mb-4">
+                                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 flex items-center gap-2">
+                                    <FileText className="w-4 h-4" /> Report Structure
+                                </h4>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="text-xs font-bold text-stone-700 block mb-2 uppercase">Depth & Format</label>
+                                    <div className="grid grid-cols-1 gap-3">
+                                        <button onClick={() => handleParamChange('reportLength', 'summary')} className={`p-3 rounded-lg border text-left flex items-center justify-between ${params.reportLength === 'summary' ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'border-stone-200 hover:border-stone-300'}`}>
+                                            <div><div className="font-bold text-sm text-stone-900">Flash Brief</div><div className="text-xs text-stone-500">3 Pages • Executive High-Level</div></div>
+                                            <Zap className="w-4 h-4 text-orange-500" />
+                                        </button>
+                                        <button onClick={() => handleParamChange('reportLength', 'standard')} className={`p-3 rounded-lg border text-left flex items-center justify-between ${params.reportLength === 'standard' ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'border-stone-200 hover:border-stone-300'}`}>
+                                            <div><div className="font-bold text-sm text-stone-900">Standard Dossier</div><div className="text-xs text-stone-500">15 Pages • Comprehensive Logic</div></div>
+                                            <FileText className="w-4 h-4 text-blue-500" />
+                                        </button>
+                                        <button onClick={() => handleParamChange('reportLength', 'comprehensive')} className={`p-3 rounded-lg border text-left flex items-center justify-between ${params.reportLength === 'comprehensive' ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'border-stone-200 hover:border-stone-300'}`}>
+                                            <div><div className="font-bold text-sm text-stone-900">Deep Dive</div><div className="text-xs text-stone-500">50+ Pages • Full Due Diligence</div></div>
+                                            <Layers className="w-4 h-4 text-purple-500" />
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="bg-stone-50 p-3 rounded border border-stone-100">
-                                    <p className="text-[10px] text-stone-500 uppercase font-bold mb-1">Strategic Objective</p>
-                                    <p className="text-xs text-stone-700 italic">"{params.problemStatement || 'No objective defined.'}"</p>
+
+                                <div>
+                                    <label className="text-xs font-bold text-stone-700 block mb-2 uppercase">Series Configuration</label>
+                                    <div className="flex gap-4">
+                                        <label className="flex items-center gap-2 p-3 border border-stone-200 rounded-lg w-full cursor-pointer hover:bg-stone-50">
+                                            <input type="radio" name="series" defaultChecked className="text-stone-900 focus:ring-stone-900" />
+                                            <span className="text-sm font-bold text-stone-700">Single Integrated File</span>
+                                        </label>
+                                        <label className="flex items-center gap-2 p-3 border border-stone-200 rounded-lg w-full cursor-pointer hover:bg-stone-50">
+                                            <input type="radio" name="series" className="text-stone-900 focus:ring-stone-900" />
+                                            <span className="text-sm font-bold text-stone-700">3-Part Series (Strat/Ops/Fin)</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* 2. Operational Chassis */}
+                        {/* Historical Feasibility Pre-Check */}
                         <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Operational Chassis</h4>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-[10px] text-stone-500 uppercase font-bold">Risk Tolerance</p>
-                                    <p className="text-sm font-bold text-stone-900">{params.riskTolerance || 'Not Set'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] text-stone-500 uppercase font-bold">Capital Structure</p>
-                                    <p className="text-sm font-bold text-stone-900">{params.calibration?.constraints?.budgetCap || 'Uncapped'}</p>
-                                </div>
-                            </div>
-                            <div className="mt-4 pt-4 border-t border-stone-100">
-                                <p className="text-[10px] text-stone-500 uppercase font-bold mb-2">Active Risk Monitors</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0 ? (
-                                        params.partnershipSupportNeeds.map((risk, i) => (
-                                            <span key={i} className="px-2 py-1 bg-red-50 text-red-700 border border-red-100 rounded text-[10px] font-bold">{risk}</span>
-                                        ))
-                                    ) : (
-                                        <span className="text-xs text-stone-400 italic">None selected.</span>
-                                    )}
-                                </div>
-                            </div>
+                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2 flex items-center gap-2">
+                                <History className="w-4 h-4" /> Historical Feasibility Pre-Check
+                            </h4>
+                            <HistoricalContextComponent params={params} />
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: Intelligence Grid & Readiness */}
+                    {/* RIGHT: AUTHORIZATION */}
                     <div className="space-y-6">
-                        {/* 3. Intelligence Grid */}
                         <div className="bg-stone-900 text-white p-6 rounded-xl border border-stone-700 shadow-lg relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                                 <Cpu size={80} />
@@ -980,173 +782,113 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         </div>
     );
 
-    const LivePreview = () => {
+    const CollaborativeCanvas = () => {
         // Calculate dynamic readiness score based on filled fields
         const readiness = calculateReadiness();
         
-        // Dynamic Header Logic: Title, Ref, Status evolve with input
-        let statusText = "Awaiting Initialization";
+        let statusText = "Initializing...";
         let refText = "UNREGISTERED";
-        let reportTitle = params.reportName || "Draft Mission Profile";
-
-        if (readiness === 0) {
-            statusText = "Awaiting Core Inputs";
-            refText = "PENDING";
-        } else if (readiness < 20) {
-            statusText = "Ingesting Entity Data";
-            if(params.organizationName) reportTitle = `${params.organizationName} (Draft)`;
-        } else if (readiness < 40) {
-            statusText = "Mapping Strategic Intent";
-            refText = "GENERATING HASH...";
-            if(params.country) reportTitle = `Mission: ${params.country} Entry`;
-        } else if (readiness < 70) {
+        
+        if (readiness === 0) statusText = "Awaiting Core Inputs";
+        else if (readiness < 40) statusText = "Mapping Strategic Intent";
+        else if (readiness < 70) {
             statusText = "Calibrating Risk Models";
             refText = params.id || "PENDING";
         } else {
             statusText = "Ready for Computation";
             refText = params.id || "READY";
         }
-        
-        // EMPTY STATE CHECK: If main identifiers are missing, show Standby UI
-        if (!params.organizationName && !params.country) {
-            return (
-                <div className="h-full flex flex-col items-center justify-center bg-stone-50 p-8 text-center border-l border-stone-200">
-                    <div className="w-20 h-20 bg-stone-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
-                        <Database className="w-10 h-10 text-stone-400" />
-                    </div>
-                    <h2 className="text-2xl font-serif font-bold text-stone-400 uppercase tracking-widest mb-2">System Standby</h2>
-                    <div className="h-1 w-12 bg-stone-300 rounded-full mb-4"></div>
-                    <p className="text-stone-500 text-sm max-w-xs leading-relaxed">
-                        Awaiting organization profile and mission parameters to initialize the summary report.
-                    </p>
-                    <div className="mt-8 flex gap-2">
-                        <div className="w-2 h-2 rounded-full bg-red-400 animate-bounce"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-400 animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-400 animate-bounce delay-200"></div>
-                    </div>
-                    <p className="text-[10px] text-stone-400 mt-4 font-mono">NEXUS_OS_v4.2 // IDLE</p>
-                </div>
-            );
-        }
 
         return (
-            <div className="h-full flex flex-col bg-stone-50 p-8 overflow-y-auto font-sans">
-                <div className="bg-white rounded-xl shadow-xl border border-stone-200 p-8 min-h-full flex flex-col animate-in fade-in zoom-in-95 duration-500">
-                    
-                    {/* Header - Now Dynamic */}
-                    <div className="border-b-2 border-stone-900 pb-6 mb-8 flex justify-between items-start">
+            <div className="h-full flex flex-col bg-stone-50 p-6 overflow-y-auto font-sans">
+                
+                {/* 1. Header & Status */}
+                <div className="bg-white rounded-xl shadow-md border border-stone-200 p-6 mb-6">
+                    <div className="flex justify-between items-start mb-4">
                         <div>
                             <div className="flex items-center gap-2 mb-2">
                                 <div className={`w-2 h-2 rounded-full ${readiness > 60 ? 'bg-green-500' : 'bg-amber-500'} animate-pulse`}></div>
-                                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Live Mission Profile</span>
+                                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Collaborative Mission Profile</span>
                             </div>
-                            <h2 className="text-3xl font-serif font-bold text-stone-900 leading-tight transition-all duration-300">{reportTitle}</h2>
-                            <p className="text-stone-500 mt-2 text-sm font-mono uppercase tracking-wide flex items-center gap-2">
-                                <span>Ref: <span className="text-stone-800 font-bold">{refText}</span></span>
-                                <span className="text-stone-300">•</span>
-                                <span>Status: <span className="text-blue-600 font-bold">{statusText}</span></span>
+                            <h2 className="text-2xl font-serif font-bold text-stone-900 leading-tight">
+                                {params.reportName || params.organizationName || "Untitled Mission"}
+                            </h2>
+                            <p className="text-xs font-mono text-stone-500 mt-1 uppercase">
+                                STATUS: <span className="text-blue-600 font-bold">{statusText}</span>
                             </p>
                         </div>
                         <div className="text-right">
-                            <div className="text-4xl font-black text-stone-200 transition-all duration-500">{readiness}%</div>
+                            <div className="text-3xl font-black text-stone-200 transition-all duration-500">{readiness}%</div>
                             <div className="text-[9px] font-bold text-stone-400 uppercase">Mission Readiness</div>
                         </div>
                     </div>
-
-                    {/* Content Grid */}
-                    <div className="space-y-8 flex-grow">
-                        
-                        {/* 1. Identity & Context */}
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                {/* UPDATE: Orange header */}
-                                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-3 border-b border-orange-200 pb-1">Principal Identity</h4>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-bold text-stone-900">{params.organizationName || 'Unidentified Entity'}</p>
-                                    <p className="text-xs text-stone-500">{params.organizationType} • {params.revenueBand || 'Scale Unknown'}</p>
-                                    <p className="text-xs text-stone-500 mt-1">{params.userName ? `Operator: ${params.userName}` : 'Operator: Pending'}</p>
-                                </div>
-                            </div>
-                            <div>
-                                {/* UPDATE: Orange header */}
-                                <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-3 border-b border-orange-200 pb-1">Mission Vector</h4>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-bold text-stone-900">{params.country ? `Target: ${params.country}` : 'Target: Global'}</p>
-                                    <p className="text-xs text-stone-500">{params.industry[0] || 'Sector Undefined'}</p>
-                                    <p className="text-xs text-stone-500 mt-1 italic">
-                                        Intent: {Array.isArray(params.strategicIntent) ? params.strategicIntent.join(', ') : params.strategicIntent || 'Pending'}
-                                    </p>
-                                </div>
-                            </div>
+                    
+                    {/* Key Attributes Grid */}
+                    <div className="grid grid-cols-3 gap-4 border-t border-stone-100 pt-4">
+                        <div>
+                            <span className="text-[10px] font-bold text-stone-400 uppercase block mb-1">Entity</span>
+                            <span className="text-sm font-bold text-stone-800">{params.organizationName || '---'}</span>
                         </div>
-
-                        {/* 2. System Logic Path (New Section) */}
-                        <div className="bg-stone-900 rounded-lg p-5 border border-stone-700 animate-in fade-in">
-                            <h4 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-3 flex items-center gap-2 border-b border-stone-800 pb-1">
-                                <Terminal className="w-4 h-4" /> System Logic Path
-                            </h4>
-                            <div className="space-y-2 text-xs font-mono text-stone-400 h-32 overflow-y-auto custom-scrollbar">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
-                                    <span>System Initialized. Awaiting core inputs...</span>
-                                </div>
-                                {params.organizationName && (
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
-                                        <span>Ingesting entity profile: <span className="text-white">{params.organizationName}</span></span>
-                                    </div>
-                                )}
-                                {params.industry.length > 0 && (
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
-                                        <span className="text-blue-400">Detected {params.industry[0]} Sector -> Activating Competitor Map...</span>
-                                    </div>
-                                )}
-                                {params.partnershipSupportNeeds && params.partnershipSupportNeeds.length > 0 && (
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
-                                        <span className="text-orange-400">High-Risk Vectors Identified: {params.partnershipSupportNeeds.length} active monitors.</span>
-                                    </div>
-                                )}
-                                {systemThinkingLog.map((log, i) => (
-                                    <div key={i} className="flex items-center gap-2 animate-in slide-in-from-left-2">
-                                        <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
-                                        <span className="text-purple-400">{log}</span>
-                                    </div>
-                                ))}
-                                <div className="animate-pulse text-green-500 font-bold">_</div>
-                            </div>
+                        <div>
+                            <span className="text-[10px] font-bold text-stone-400 uppercase block mb-1">Jurisdiction</span>
+                            <span className="text-sm font-bold text-stone-800">{params.country || '---'}</span>
                         </div>
-
-                        {/* 3. Copilot Intervention (New Section) */}
-                        <div className="bg-white border-2 border-dashed border-stone-200 rounded-lg p-5 animate-in fade-in shadow-sm relative overflow-hidden group cursor-pointer hover:border-blue-300 transition-colors" onClick={() => onCopilotMessage && onCopilotMessage({type: 'question', title: 'User Query', description: 'I need to refine this summary report.', id: Date.now().toString()})}>
-                            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                                <Lightbulb size={60} />
-                            </div>
-                            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <BrainCircuit className="w-4 h-4" /> Copilot Intervention
-                            </h4>
-                            <p className="text-sm text-stone-600 leading-relaxed font-medium pr-8">
-                                "Does this profile accurately reflect your strategic intent? If not, ask me to refine the mission parameters or add specific constraints."
-                            </p>
-                            <div className="mt-4 flex items-center gap-2 text-xs text-blue-600 font-bold group-hover:underline">
-                                Click to consult Copilot <ArrowRight className="w-3 h-3" />
-                            </div>
-                        </div>
-
-                    </div>
-
-                    {/* Footer / Agreement */}
-                    <div className="mt-8 border-t-2 border-stone-100 pt-6">
-                        <div className="flex items-center justify-between">
-                            <div className="text-[10px] text-stone-400 max-w-xs leading-tight">
-                                <Lock className="w-3 h-3 inline mr-1" />
-                                <strong>Human-in-the-Loop Protocol:</strong> System confidence caps at 99%. The final 1% requires your strategic sign-off.
-                            </div>
+                        <div>
+                            <span className="text-[10px] font-bold text-stone-400 uppercase block mb-1">Complexity</span>
+                            <span className="text-sm font-bold text-stone-800 capitalize">{params.reportComplexity || 'Standard'}</span>
                         </div>
                     </div>
-
                 </div>
+
+                {/* 2. Collaborative Strategic Notepad */}
+                <div className="bg-white rounded-xl shadow-md border border-stone-200 p-0 flex flex-col flex-grow mb-6 overflow-hidden">
+                    <div className="p-4 border-b border-stone-100 bg-gradient-to-r from-stone-50 to-white flex justify-between items-center">
+                        <h3 className="font-bold text-stone-800 flex items-center gap-2 text-sm">
+                            <BrainCircuit className="w-4 h-4 text-purple-600" /> 
+                            Collaborative Strategy Notepad
+                        </h3>
+                        <span className="text-[10px] text-stone-400 font-mono uppercase">AI LISTENING ACTIVE</span>
+                    </div>
+                    
+                    <div className="flex-grow p-4 relative">
+                        <textarea 
+                            className="w-full h-full min-h-[200px] resize-none outline-none text-sm text-stone-700 leading-relaxed placeholder-stone-300 font-medium"
+                            placeholder="Type unstructured thoughts, concerns, or specific directives here. The AI Copilot will read this in real-time to adjust system parameters and risk models..."
+                            value={params.collaborativeNotes}
+                            onChange={(e) => handleParamChange('collaborativeNotes', e.target.value)}
+                        />
+                        {/* Simulated AI Reaction Bubble */}
+                        {params.collaborativeNotes && params.collaborativeNotes.length > 10 && (
+                            <div className="absolute bottom-4 right-4 bg-blue-50 border border-blue-100 text-blue-800 p-3 rounded-lg shadow-lg text-xs max-w-xs animate-in slide-in-from-bottom-2">
+                                <div className="flex items-center gap-2 mb-1 font-bold">
+                                    <MessageSquare className="w-3 h-3" /> Copilot Reaction
+                                </div>
+                                Analyzing note... Updating module selection logic to align with new input.
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* 3. System Logic Path (Reactive Log) */}
+                <div className="bg-stone-900 rounded-xl p-5 border border-stone-700 animate-in fade-in shadow-lg">
+                    <h4 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-3 flex items-center gap-2 border-b border-stone-800 pb-1">
+                        <Terminal className="w-4 h-4" /> System Logic Path
+                    </h4>
+                    <div className="space-y-2 text-xs font-mono text-stone-400 h-32 overflow-y-auto custom-scrollbar">
+                        <div className="flex items-center gap-2">
+                            <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                            <span>System Initialized. Listening to Collaborative Notepad...</span>
+                        </div>
+                        {systemThinkingLog.map((log, i) => (
+                            <div key={i} className="flex items-center gap-2 animate-in slide-in-from-left-2">
+                                <span className="text-stone-600">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                                <span className="text-purple-400">{log}</span>
+                            </div>
+                        ))}
+                        <div className="animate-pulse text-green-500 font-bold">_</div>
+                    </div>
+                </div>
+
             </div>
         );
     };
@@ -1160,8 +902,8 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                 <div className="max-w-3xl mx-auto w-full">
                     <div className="mb-8">
                         <button onClick={() => setStep(Math.max(1, step - 1) as any)} disabled={step === 1} className="text-stone-400 hover:text-stone-800 mb-4 flex items-center gap-1 text-xs font-bold uppercase tracking-wider disabled:opacity-0 transition-opacity"><ChevronLeft size={14} /> Back</button>
-                        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">{step === 1 && "Establish Organization DNA"}{step === 2 && "Strategic Mandate"}{step === 3 && "Operational Mechanics"}{step === 4 && "Intelligence Architecture"}{step === 5 && "Mission Profile Validation"}</h1>
-                        <p className="text-stone-500 text-sm">{step === 1 && "Deep entity profiling: define scale, authority, and identity."}{step === 2 && "Define specific mission vectors, priorities, and success metrics."}{step === 3 && "Calibrate risk, procurement, and financial constraints."}{step === 4 && "System auto-provisions AI agents based on mission profile."}{step === 5 && "Verify strategic understanding before generating final dossier."}</p>
+                        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">{step === 1 && "Establish Organization DNA"}{step === 2 && "Strategic Mandate"}{step === 3 && "Operational Mechanics"}{step === 4 && "Neural Workbench"}{step === 5 && "Output Architect"}</h1>
+                        <p className="text-stone-500 text-sm">{step === 1 && "Deep entity profiling: define scale, authority, and identity."}{step === 2 && "Define specific mission vectors, priorities, and success metrics."}{step === 3 && "Calibrate risk, procurement, and financial constraints."}{step === 4 && "Collaborative interface: Configure modules via discussion."}{step === 5 && "Configure final deliverables and authorize generation."}</p>
                     </div>
                     <div className="flex items-center space-x-2 mb-8">{[1, 2, 3, 4, 5, 6].map(num => (<React.Fragment key={num}><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === num ? 'bg-stone-900 text-white shadow-md scale-110' : step > num ? 'bg-green-500 text-white' : 'bg-stone-200 text-stone-500'}`}>{step > num ? <CheckCircle2 size={14} /> : num}</div>{num < 6 && <div className={`h-1 w-8 rounded-full ${step > num ? 'bg-green-500' : 'bg-stone-200'}`} />} </React.Fragment>))}</div>
                     <div className="min-h-[400px]">
@@ -1180,7 +922,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
                 </div>
             </div>
             <div className={`flex flex-col bg-white transition-all duration-500 ${step === 6 ? 'w-full' : 'w-[40%] shadow-xl'}`}>
-                {step < 6 ? <LivePreview /> : renderStep6_Synthesis()}
+                {step < 6 ? <CollaborativeCanvas /> : renderStep6_Synthesis()}
             </div>
             <AddOpportunityModal isOpen={isOpportunityModalOpen} onClose={() => setIsOpportunityModalOpen(false)} onSave={() => {}} />
             {isAnalysisModalOpen && params.activeOpportunity && (<AnalysisModal item={params.activeOpportunity} region={params.country || 'Global'} onClose={() => setIsAnalysisModalOpen(false)} />)}

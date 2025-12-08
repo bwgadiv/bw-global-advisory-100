@@ -58,6 +58,8 @@ export const INITIAL_PARAMETERS: ReportParameters = {
   
   // Output Config
   reportLength: 'standard',
+  reportComplexity: 'standard',
+  collaborativeNotes: '',
   outputFormat: 'report',
   letterStyle: 'Formal Exploratory',
   stakeholderPerspectives: [],

@@ -48,7 +48,6 @@ export interface Feature {
   id: string;
   title: string;
   description: string;
-  stat?: string;
 }
 
 export interface PricingPlan {
@@ -164,6 +163,8 @@ export interface ReportParameters {
   
   // Output Config
   reportLength: string;
+  reportComplexity: 'flash' | 'standard' | 'omni'; // NEW: Dimensions of the report
+  collaborativeNotes: string; // NEW: User's scratchpad for the AI
   outputFormat: string;
   letterStyle: string;
   stakeholderPerspectives: string[];

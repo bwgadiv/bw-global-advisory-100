@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { INDUSTRIES, REGIONS_AND_COUNTRIES } from '../constants';
 import { Search, Users, Globe } from 'lucide-react';
@@ -39,6 +40,8 @@ const GlobalPartnerSearch: React.FC = () => {
         selectedModels: [],
         selectedModules: [],
         reportLength: 'standard',
+        reportComplexity: 'standard',
+        collaborativeNotes: '',
         outputFormat: 'report',
         stakeholderPerspectives: [],
         includeCrossSectorMatches: false,

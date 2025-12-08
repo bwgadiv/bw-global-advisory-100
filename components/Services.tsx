@@ -33,11 +33,15 @@ const CORE_TRINITY: Service[] = [
 ];
 
 const SPECIALIZED_ENGINES = [
+  // Strategic
   { acronym: 'RROI', name: 'Regional Readiness & Opportunity Index', icon: <Globe className="w-4 h-4" />, cat: 'Strategic' },
   { acronym: 'SEAM', name: 'Strategic Ecosystem Alignment Map', icon: <Layers className="w-4 h-4" />, cat: 'Strategic' },
   { acronym: 'LAI', name: 'Latent Asset Identification', icon: <Zap className="w-4 h-4" />, cat: 'Strategic' },
   { acronym: 'BARNA', name: 'Best Alternative to Negotiated Agreement Plus', icon: <Scale className="w-4 h-4" />, cat: 'Strategic' },
   { acronym: 'NVI', name: 'Negotiation Value Index', icon: <Briefcase className="w-4 h-4" />, cat: 'Strategic' },
+  { acronym: 'CRI', name: 'Cultural Resonance Index', icon: <Users className="w-4 h-4" />, cat: 'Strategic' },
+
+  // Operational
   { acronym: 'CAP', name: 'Counterparty Analysis Protocol', icon: <Users className="w-4 h-4" />, cat: 'Operational' },
   { acronym: 'AGI', name: 'Accelerated Growth Index', icon: <TrendingUp className="w-4 h-4" />, cat: 'Operational' },
   { acronym: 'VCI', name: 'Value Creation Index', icon: <Activity className="w-4 h-4" />, cat: 'Operational' },
@@ -45,8 +49,13 @@ const SPECIALIZED_ENGINES = [
   { acronym: 'ESI', name: 'Execution Superiority Index', icon: <Target className="w-4 h-4" />, cat: 'Operational' },
   { acronym: 'ISI', name: 'Innovation Strength Index', icon: <BrainCircuit className="w-4 h-4" />, cat: 'Operational' },
   { acronym: 'OSI', name: 'Operational Sustainability Index', icon: <Anchor className="w-4 h-4" />, cat: 'Operational' },
+  { acronym: 'TCO', name: 'Total Cost of Ownership (Regional)', icon: <BarChart3 className="w-4 h-4" />, cat: 'Operational' },
+
+  // Risk
   { acronym: 'PRI', name: 'Portfolio Risk Index', icon: <ShieldCheck className="w-4 h-4" />, cat: 'Risk' },
   { acronym: 'RNI', name: 'Regulatory Navigation Index', icon: <Lock className="w-4 h-4" />, cat: 'Risk' },
+  { acronym: 'SRA', name: 'Sovereign Risk Assessment', icon: <Globe className="w-4 h-4" />, cat: 'Risk' },
+  { acronym: 'IDV', name: 'Institutional Distance Vector', icon: <Scale className="w-4 h-4" />, cat: 'Risk' },
 ];
 
 const FOUNDATION_MODELS = [
@@ -244,10 +253,10 @@ export const Services: React.FC = () => {
         </div>
         
         <p className="text-center text-stone-500 mb-12 max-w-3xl mx-auto text-sm">
-            These 14 specialized engines were developed iteratively to address specific failure modes identified in our historical dataset. They are proprietary architectures, not standard economic theories.
+            These 18 specialized engines were developed iteratively to address specific failure modes identified in our historical dataset. They are proprietary architectures, not standard economic theories.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-20">
             {SPECIALIZED_ENGINES.map((eng, idx) => (
                 <div key={idx} className="bg-stone-50 border border-stone-200 p-4 rounded-sm hover:bg-white hover:shadow-md transition-all group">
                     <div className="flex items-center justify-between mb-2">
